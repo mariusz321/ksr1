@@ -91,7 +91,7 @@ void Knn::test(QTextStream &out){
 
     QList<KnnThread *> threadsList = QList<KnnThread *>();
     for(int i=0; i<NUM_THREADS; i++){
-        KnnThread *thread = new KnnThread(vectorsList, labelsList, index, index+i, *this, QString().setNum(i+1), resultList.at(i));
+        KnnThread *thread = new KnnThread(vectorsList, labelsList, index, index+i, *this, QString().setNum(i+1), NUM_THREADS, resultList.at(i));
         threadsList.append(thread);
         thread->start();
     }

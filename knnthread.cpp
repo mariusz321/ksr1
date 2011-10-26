@@ -1,7 +1,7 @@
 #include "knnthread.h"
 #include <iostream>
 
-KnnThread::KnnThread(QList<QVector<double> > vectorList, QList<QString> labelsList,  int index1, int index2, Knn knn, QString name, QList<QPair<int, int> > *resultList)
+KnnThread::KnnThread(QList<QVector<double> > vectorList, QList<QString> labelsList,  int index1, int index2, Knn knn, QString name, int numThreads, QList<QPair<int, int> > *resultList)
 {
     this->vectorList=vectorList;
     this->labelsList=labelsList;
@@ -9,6 +9,7 @@ KnnThread::KnnThread(QList<QVector<double> > vectorList, QList<QString> labelsLi
     this->index2=index2;
     this->knn=knn;
     this->resultList=resultList;
+    this->numThreads=numThreads;
     this->name=name;
 }
 
@@ -25,7 +26,7 @@ void KnnThread::run(){
     if(file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
 
-        for(int i=index2; i<vectorList.size(); i+=4){ //wektory niesklasyfikowane
+        for(int i=index2; i<vectorList.size(); i+=numThreads){ //wektory niesklasyfikowane
             std::cout<<i<<std::endl;//////
             out<<"\n\nWektor: "<<i<<"\n";//////
             for(int j=0; j<index1; j++){
