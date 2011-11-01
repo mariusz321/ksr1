@@ -82,7 +82,7 @@ double Knn::normalizedDistance(QVector<double> vect1, QVector<double> vect2){
 void Knn::test(QTextStream &out){
     int index = floor(vectorsList.size()*0.6);
 
-    int NUM_THREADS = 2;
+    int NUM_THREADS = QThread::idealThreadCount();
 
     QList<QList<QPair<int, int> > *> resultList = QList<QList<QPair<int, int> > *>();
     for(int i=0; i<NUM_THREADS; i++){
