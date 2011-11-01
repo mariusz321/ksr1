@@ -2,6 +2,7 @@
 #include <QElapsedTimer>
 #include <iostream>
 #include "knn.h"
+#include "knnsimilaritythread.h"
 #include "sgmlreader.h"
 #include "tfidf.h"
 
@@ -10,18 +11,19 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QString DIRECTORY_NAME = QString("texts");
-    bool KNN = true;
+    bool KNN = false;
     bool EXTRACTION = false;
+    bool SIMILARITY = true;
 
-    //    QStringList labelsList = QStringList();
-    //    labelsList.append("WEST-GERMANY");
-    //    labelsList.append("USA");
-    //    labelsList.append("FRANCE");
-    //    labelsList.append("UK");
-    //    labelsList.append("CANADA");
-    //    labelsList.append("JAPAN");
+//        QStringList labelsList = QStringList();
+//        labelsList.append("WEST-GERMANY");
+//        labelsList.append("USA");
+//        labelsList.append("FRANCE");
+//        labelsList.append("UK");
+//        labelsList.append("CANADA");
+//        labelsList.append("JAPAN");
 
-    //    QString tag = "PLACES";
+//        QString tag = "PLACES";
 
     QStringList labelsList = QStringList();
     labelsList.append("COFFEE");
@@ -38,10 +40,33 @@ int main(int argc, char *argv[])
     QElapsedTimer timer = QElapsedTimer();
     timer.start();
 
+    if(SIMILARITY){
+        QList<QPair<QString, QString> > labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
+        QMap<QString, int> wordToCountMap = sgmlReader.countWords(labelsArticlesPairs);
+        QSet<QString> allWordsSet = sgmlReader.getAllWordsSet(wordToCountMap, 0.0, 0.9);
+        QList<QSet<QString> > wordSetList = sgmlReader.getWordSets(labelsArticlesPairs, allWordsSet);
+        QFile file("log.txt");
+        if(file.open(QIODevice::WriteOnly)){
+            QTextStream out(&file);
+
+            Knn knn = Knn();
+            knn.initLabels(labelsArticlesPairs);
+            std::cout<<"Czas wczytywania: "<<timer.elapsed()<<" ms"<<std::endl;
+            out<<"Czas wczytywania: "<<timer.elapsed()<<" ms\n";
+            knn.testSimilarity(out, wordSetList, allWordsSet);
+
+            //czas obliczen
+            out<<endl<<"Czas obliczen: "<<timer.elapsed()<<" ms\n";
+
+            file.close();
+        }
+
+    }
+
     if(EXTRACTION){
         QList<QPair<QString, QString> > labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
         QMap<QString, int> wordToCountMap = sgmlReader.countWords(labelsArticlesPairs);
-        QList<QPair<int, QString> > wordsCountList = sgmlReader.getWordsCountList(wordToCountMap, 0.9, 0.08);
+        QList<QPair<int, QString> > wordsCountList = sgmlReader.getWordsCountList(wordToCountMap, 0.9, 0.099);
         QList<QRegExp> regexpList = sgmlReader.getQRegExpList(wordsCountList);
 
         //TFIDF
@@ -63,7 +88,7 @@ int main(int argc, char *argv[])
             knn.readVetors("wektory.txt");
             std::cout<<"Czas wczytywania: "<<timer.elapsed()<<" ms"<<std::endl;
             out<<"Czas wczytywania: "<<timer.elapsed()<<" ms\n";
-            knn.test(out);
+            knn.testDistance(out);
 
             //czas obliczen
             out<<endl<<"Czas obliczen: "<<timer.elapsed()<<" ms\n";

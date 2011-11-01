@@ -2,6 +2,7 @@
 #include <cmath>
 #include <iostream>
 #include "knnthread.h"
+#include "knnsimilaritythread.h"
 
 Knn::Knn()
 {
@@ -31,7 +32,16 @@ void Knn::readVetors(QString fileName){
     }
 }
 
-double Knn::euclideanDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
+void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
+    labelsList =  QList<QString>();
+    QPair<QString, QString> labelArticlePair;
+    foreach(labelArticlePair, labelsArticlesPairs){
+        labelsList.append(labelArticlePair.first);
+    }
+
+}
+
+double Knn::euclideanDistance(QVector<double> vect1, QVector<double> vect2){
     double sum = 0;
     double temp;
     for(int i = 0; i<vect1.size(); i++ ){
@@ -79,7 +89,7 @@ double Knn::normalizedDistance(const QVector<double> &vect1, const QVector<doubl
     return sqrt(sum);
 }
 
-void Knn::test(QTextStream &out){
+void Knn::testDistance(QTextStream &out){
     int index = floor(vectorsList.size()*0.6);
 
     int NUM_THREADS = QThread::idealThreadCount();
@@ -113,7 +123,58 @@ void Knn::test(QTextStream &out){
         out<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<"\n";
     }
     out.flush();
-
 }
+
+void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QSet<QString> allWordsSet){
+    int index = floor(wordSetList.size()*0.6);
+
+    int NUM_THREADS = 4;
+
+    QList<QList<QPair<int, int> > *> resultList = QList<QList<QPair<int, int> > *>();
+    for(int i=0; i<NUM_THREADS; i++){
+        resultList.append(new QList<QPair<int, int> >());
+    }
+
+    QList<KnnSimilarityThread *> threadsList = QList<KnnSimilarityThread *>();
+    for(int i=0; i<NUM_THREADS; i++){
+        KnnSimilarityThread *thread = new KnnSimilarityThread(wordSetList, allWordsSet, labelsList, index, index+i, *this, QString().setNum(i+1), NUM_THREADS, resultList.at(i));
+        threadsList.append(thread);
+        thread->start();
+    }
+
+    for(int i=0; i<threadsList.size(); i++){
+        threadsList.at(i)->wait();
+    }
+
+    for(int k=0; k<resultList.at(0)->size(); k++){
+        int success = 0;
+        int failure = 0;
+        for (int i=0; i<resultList.size(); i++){
+            success += resultList.at(i)->at(k).first;
+            failure += resultList.at(i)->at(k).second;
+        }
+
+        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<std::endl;
+        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<"\n";
+    }
+    out.flush();
+}
+
+double Knn::jaccardSimilarity(QSet<QString> set1, QSet<QString> set2){
+    if(set1.size()==0 && set2.size()==0){
+        return 1;
+    }
+    QSet<QString> sumSet = set1+set2;
+
+    return 1.0*set1.intersect(set2).size()/sumSet.size();
+}
+
+double Knn::smcSimilarity(QSet<QString> set1, QSet<QString> set2, QSet<QString> allWordsSet){
+    QSet<QString> notSet1 = allWordsSet - set1;
+    QSet<QString> notSet2 = allWordsSet - set2;
+
+    return 1.0*(set1.intersect(set2).size()+notSet1.intersect(notSet2).size())/allWordsSet.size();
+}
+
 
 

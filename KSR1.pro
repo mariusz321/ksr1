@@ -20,13 +20,17 @@ SOURCES += main.cpp \
     tfidf.cpp \
     knnthread.cpp \
     knn.cpp \
-    sgmlreader.cpp
+    sgmlreader.cpp \
+    knnsimilaritythread.cpp
 
 HEADERS += \
     tfidf.h \
     knnthread.h \
     knn.h \
-    sgmlreader.h
+    sgmlreader.h \
+    knnsimilaritythread.h
+
+
 
 
 

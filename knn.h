@@ -8,6 +8,7 @@
 #include<QStringList>
 #include<QVector>
 #include<QList>
+#include<QSet>
 #include<QElapsedTimer>
 
 class Knn
@@ -19,11 +20,15 @@ public:
     QList<QString> labelsList;
 
     void readVetors(QString);
-    double euclideanDistance(const QVector<double> &, const QVector<double> &) const;
-    double manhattanDistance(const QVector<double> &, const QVector<double> &) const;
-    double chebyshevDistance(const QVector<double> &, const QVector<double> &) const;
-    double normalizedDistance(const QVector<double> &, const QVector<double> &) const;
-    void test(QTextStream &);
+    void initLabels(QList<QPair<QString, QString> >);
+    double euclideanDistance(QVector<double>, QVector<double>);
+    double manhattanDistance(QVector<double>, QVector<double>);
+    double chebyshevDistance(QVector<double>, QVector<double>);
+    double normalizedDistance(const QVector<double>, const QVector<double>);
+    double jaccardSimilarity(QSet<QString>, QSet<QString>);
+    double smcSimilarity(QSet<QString>, QSet<QString>, QSet<QString>);
+    void testDistance(QTextStream &);
+    void testSimilarity(QTextStream &, QList<QSet<QString> >, QSet<QString>);
 };
 
 #endif // KNN_H

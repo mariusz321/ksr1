@@ -1,5 +1,5 @@
-#ifndef TEST_H
-#define TEST_H
+#ifndef KNNTHREAD_H
+#define KNNTHREAD_H
 
 #include<QThread>
 #include<QMapIterator>
@@ -22,4 +22,4 @@ private:
     QList<QPair<int, int> > *resultList;
 };
 
-#endif // TEST_H
+#endif // KNNTHREAD_H

@@ -128,6 +128,7 @@ QList<QPair<QString, QString> > SgmlReader::readDirectory(QString dirName){
 }
 
 
+// tworzy mape: slowo na liczbe wystapien
 QMap<QString, int> SgmlReader::countWords(QList<QPair<QString, QString> > labelsArticlesPairs){
     QMap<QString, int> wordToCountMap = QMap<QString, int>(); //mapa slowo-liczba_wystapien
     QRegExp wordRegExp = QRegExp("\\b[a-z]+(-[a-z]+)*\\b", Qt::CaseInsensitive);
@@ -141,6 +142,27 @@ QMap<QString, int> SgmlReader::countWords(QList<QPair<QString, QString> > labels
         }
     }
     return wordToCountMap;
+}
+
+
+// tworzy liste zbiorow wyrazow dla kazdego artykulu
+QList<QSet<QString> > SgmlReader::getWordSets(QList<QPair<QString, QString> > labelsArticlesPairs, QSet<QString> allWordsSet){
+    QList<QSet<QString> > wordSetList = QList<QSet<QString> >(); //mapa slowo-liczba_wystapien
+    QRegExp wordRegExp = QRegExp("\\b[a-z]+(-[a-z]+)*\\b", Qt::CaseInsensitive);
+    QPair<QString, QString> pair;
+    foreach(pair, labelsArticlesPairs){
+        int pos = 0;
+        QSet<QString> stringSet = QSet<QString>();
+        while ((pos = wordRegExp.indexIn(pair.second, pos)) != -1) {
+            pos += wordRegExp.matchedLength();
+            QString word = wordRegExp.cap();
+            if(allWordsSet.contains(word)){
+                stringSet.insert(word);
+            }
+        }
+        wordSetList.append(stringSet);
+    }
+    return wordSetList;
 }
 
 
@@ -169,6 +191,16 @@ QList<QPair<int, QString> > SgmlReader::getWordsCountList(QMap<QString, int> wor
         file.close();
     }
     return wordsCountList;
+}
+
+QSet<QString> SgmlReader::getAllWordsSet(QMap<QString, int> wordToCountMap, float listCutStart=-1, float listCutLen=-1){
+    QList<QPair<int, QString> > wordsCountList = getWordsCountList(wordToCountMap, listCutStart, listCutLen);
+    QSet<QString> allWordsSet = QSet<QString>();
+    QPair<int, QString> pair;
+    foreach(pair, wordsCountList){
+        allWordsSet.insert(pair.second);
+    }
+    return allWordsSet;
 }
 
 
