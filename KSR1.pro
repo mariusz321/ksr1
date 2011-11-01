@@ -14,6 +14,7 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
+QMAKE_CXXFLAGS += -mtune=native -march=native
 
 SOURCES += main.cpp \
     tfidf.cpp \
