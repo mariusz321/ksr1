@@ -7,11 +7,11 @@
 
 int main(int argc, char *argv[])
 {
+    QCoreApplication a(argc, argv);
+
     QString DIRECTORY_NAME = QString("texts");
     bool KNN = true;
     bool EXTRACTION = false;
-
-    //QCoreApplication a(argc, argv);
 
     //    QStringList labelsList = QStringList();
     //    labelsList.append("WEST-GERMANY");
