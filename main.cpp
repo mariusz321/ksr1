@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
     if(SIMILARITY){
         QList<QPair<QString, QString> > labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
         QMap<QString, int> wordToCountMap = sgmlReader.countWords(labelsArticlesPairs);
-        QSet<QString> allWordsSet = sgmlReader.getAllWordsSet(wordToCountMap, 0.0, 0.9);
+        QSet<QString> allWordsSet = sgmlReader.getAllWordsSet(wordToCountMap, 0.0, 0.99);
         QList<QSet<QString> > wordSetList = sgmlReader.getWordSets(labelsArticlesPairs, allWordsSet);
         QFile file("log.txt");
         if(file.open(QIODevice::WriteOnly)){
