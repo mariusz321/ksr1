@@ -1,16 +1,16 @@
 #include "knnthread.h"
 #include <iostream>
 
-KnnThread::KnnThread(QList<QVector<double> > vectorList, QList<QString> labelsList,  int index1, int index2, Knn knn, QString name, int numThreads, QList<QPair<int, int> > *resultList)
+KnnThread::KnnThread(const QList<QVector<double> > &vectorList, const QList<QString> &labelsList, int index1, int index2, const Knn &knn, QString name, int numThreads, QList<QPair<int, int> > *resultList) :
+    vectorList(vectorList),
+    labelsList(labelsList),
+    index1(index1),
+    index2(index2),
+    knn(knn),
+    name(name),
+    numThreads(numThreads)
 {
-    this->vectorList=vectorList;
-    this->labelsList=labelsList;
-    this->index1=index1;
-    this->index2=index2;
-    this->knn=knn;
     this->resultList=resultList;
-    this->numThreads=numThreads;
-    this->name=name;
 }
 
 void KnnThread::run(){
@@ -22,7 +22,7 @@ void KnnThread::run(){
 
     double distance;
 
-    QFile file(name.append(".txt"));
+    QFile file(name + ".txt");
     if(file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
 

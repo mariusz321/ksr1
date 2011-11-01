@@ -19,10 +19,10 @@ public:
     QList<QString> labelsList;
 
     void readVetors(QString);
-    double euclideanDistance(QVector<double>, QVector<double>);
-    double manhattanDistance(QVector<double>, QVector<double>);
-    double chebyshevDistance(QVector<double>, QVector<double>);
-    double normalizedDistance(QVector<double>, QVector<double>);
+    double euclideanDistance(const QVector<double> &, const QVector<double> &) const;
+    double manhattanDistance(const QVector<double> &, const QVector<double> &) const;
+    double chebyshevDistance(const QVector<double> &, const QVector<double> &) const;
+    double normalizedDistance(const QVector<double> &, const QVector<double> &) const;
     void test(QTextStream &);
 };
 

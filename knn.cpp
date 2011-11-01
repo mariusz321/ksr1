@@ -31,7 +31,7 @@ void Knn::readVetors(QString fileName){
     }
 }
 
-double Knn::euclideanDistance(QVector<double> vect1, QVector<double> vect2){
+double Knn::euclideanDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
     double sum = 0;
     double temp;
     for(int i = 0; i<vect1.size(); i++ ){
@@ -41,7 +41,7 @@ double Knn::euclideanDistance(QVector<double> vect1, QVector<double> vect2){
     return sqrt(sum);
 }
 
-double Knn::manhattanDistance(QVector<double> vect1, QVector<double> vect2){
+double Knn::manhattanDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
     double sum = 0;
     for(int i = 0; i<vect1.size(); i++ ){
         sum += abs(vect1.at(i)-vect2.at(i));
@@ -49,7 +49,7 @@ double Knn::manhattanDistance(QVector<double> vect1, QVector<double> vect2){
     return sum;
 }
 
-double Knn::chebyshevDistance(QVector<double> vect1, QVector<double> vect2){
+double Knn::chebyshevDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
     double max = 0;
     double temp;
     for(int i = 0; i<vect1.size(); i++ ){
@@ -61,7 +61,7 @@ double Knn::chebyshevDistance(QVector<double> vect1, QVector<double> vect2){
     return max;
 }
 
-double Knn::normalizedDistance(QVector<double> vect1, QVector<double> vect2){
+double Knn::normalizedDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
     double length1 = 0, length2=0;
     for(int i=0; i<vect1.size(); i++){
         length1+=vect1.at(i)*vect1.at(i);
@@ -98,6 +98,7 @@ void Knn::test(QTextStream &out){
 
     for(int i=0; i<threadsList.size(); i++){
         threadsList.at(i)->wait();
+        delete threadsList.at(i);
     }
 
     for(int k=0; k<resultList.at(0)->size(); k++){

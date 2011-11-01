@@ -8,17 +8,17 @@
 class KnnThread: public QThread
 {
 public:
-    KnnThread(QList<QVector<double> >, QList<QString>, int, int, Knn, QString, int, QList<QPair<int, int> >*);
+    KnnThread(const QList<QVector<double> > &, const QList<QString> &, int, int, const Knn &, QString, int, QList<QPair<int, int> >*);
     void run();
 
 private:
-    QList<QVector<double> > vectorList;
-    QList<QString> labelsList;
-    int index1;
-    int index2;
-    Knn knn;
-    QString name;
-    int numThreads;
+    const QList<QVector<double> > vectorList;
+    const QList<QString> labelsList;
+    const int index1;
+    const int index2;
+    const Knn knn;
+    const QString name;
+    const int numThreads;
     QList<QPair<int, int> > *resultList;
 };
 
