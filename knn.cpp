@@ -119,9 +119,15 @@ void Knn::testDistance(QTextStream &out){
             failure += resultList.at(i)->at(k).second;
         }
 
+
         std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<std::endl;
         out<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<"\n";
     }
+
+    for (int i = 0; i < resultList.size(); i++) {
+        delete resultList.at(i);
+    }
+
     out.flush();
 }
 
@@ -144,6 +150,7 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
 
     for(int i=0; i<threadsList.size(); i++){
         threadsList.at(i)->wait();
+        delete threadsList.at(i);
     }
 
     for(int k=0; k<resultList.at(0)->size(); k++){
@@ -157,6 +164,11 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
         std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<std::endl;
         out<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<"\n";
     }
+
+    for (int i = 0; i < resultList.size(); i++) {
+        delete resultList.at(i);
+    }
+
     out.flush();
 }
 
