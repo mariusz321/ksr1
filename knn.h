@@ -21,7 +21,6 @@ public:
 
     void readVetors(QString);
     void initLabels(QList<QPair<QString, QString> >);
-    double manhattanDistance(const QVector<double>&, const QVector<double>&) const;
     double chebyshevDistance(const QVector<double>&, const QVector<double>&) const;
     double normalizedDistance(const QVector<double>&, const QVector<double>&) const;
     double jaccardSimilarity(QSet<QString>, QSet<QString>);

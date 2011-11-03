@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     knnsimilaritythread.cpp \
     EuclideanMetric.cpp \
     MetricInterface.cpp \
-    MetricFactory.cpp
+    MetricFactory.cpp \
+    ManhattanMetric.cpp
 
 HEADERS += \
     tfidf.h \
@@ -34,7 +35,14 @@ HEADERS += \
     knnsimilaritythread.h \
     MetricInterface.h \
     EuclideanMetric.h \
-    MetricFactory.h
+    MetricFactory.h \
+    ManhattanMetric.h
+
+
+
+
+
+
 
 
 

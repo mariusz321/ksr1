@@ -43,14 +43,6 @@ void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
 
 }
 
-double Knn::manhattanDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
-    double sum = 0;
-    for(int i = 0; i<vect1.size(); i++ ){
-        sum += abs(vect1.at(i)-vect2.at(i));
-    }
-    return sum;
-}
-
 double Knn::chebyshevDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
     double max = 0;
     double temp;
