@@ -43,18 +43,6 @@ void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
 
 }
 
-double Knn::chebyshevDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
-    double max = 0;
-    double temp;
-    for(int i = 0; i<vect1.size(); i++ ){
-        temp = abs(vect1.at(i)-vect2.at(i));
-        if(temp>max){
-            max=temp;
-        }
-    }
-    return max;
-}
-
 double Knn::normalizedDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
     double length1 = 0, length2=0;
     for(int i=0; i<vect1.size(); i++){

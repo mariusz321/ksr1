@@ -25,7 +25,8 @@ SOURCES += main.cpp \
     EuclideanMetric.cpp \
     MetricInterface.cpp \
     MetricFactory.cpp \
-    ManhattanMetric.cpp
+    ManhattanMetric.cpp \
+    ChebyshevMetric.cpp
 
 HEADERS += \
     tfidf.h \
@@ -36,7 +37,10 @@ HEADERS += \
     MetricInterface.h \
     EuclideanMetric.h \
     MetricFactory.h \
-    ManhattanMetric.h
+    ManhattanMetric.h \
+    ChebyshevMetric.h
+
+
 
 
 
