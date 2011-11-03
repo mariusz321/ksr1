@@ -43,24 +43,6 @@ void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
 
 }
 
-double Knn::normalizedDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
-    double length1 = 0, length2=0;
-    for(int i=0; i<vect1.size(); i++){
-        length1+=vect1.at(i)*vect1.at(i);
-        length2+=vect2.at(i)*vect2.at(i);
-    }
-    length1=sqrt(length1);
-    length2=sqrt(length2);
-
-    double sum = 0;
-    double temp;
-    for(int i = 0; i<vect1.size(); i++ ){
-        temp = vect1.at(i)/length1-vect2.at(i)/length2;
-        sum += temp*temp;
-    }
-    return sqrt(sum);
-}
-
 void Knn::testDistance(QTextStream &out){
     int index = floor(vectorsList.size()*0.6);
 

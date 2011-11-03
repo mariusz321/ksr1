@@ -2,6 +2,7 @@
 #include "EuclideanMetric.h"
 #include "ManhattanMetric.h"
 #include "ChebyshevMetric.h"
+#include "NormalizedMetric.h"
 
 #include <QString>
 
@@ -13,6 +14,8 @@ MetricInterface *MetricFactory::getNewMetric(const QString &name)
         return new ManhattanMetric();
     } else if (name == "chebyshev") {
         return new ChebyshevMetric();
+    } else if (name == "normalized") {
+        return new NormalizedMetric();
     } else {
         return nullptr;
     }
