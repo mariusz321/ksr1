@@ -17,8 +17,9 @@ int Tfidf::countMatches(QRegExp regexp, QString text){
 
 QList<double> Tfidf::computeTF(QVector<int> counts){
     int sum=0;
-    QList<double> list = QList<double>();
-    foreach(int count, counts){
+    QList<double> list;
+    list.reserve(counts.size());
+    foreach(const int count, counts){
         sum+=count;
     }
     if(sum==0){
@@ -34,31 +35,31 @@ QList<double> Tfidf::computeTF(QVector<int> counts){
     return list;
 }
 QList<QList<double> > Tfidf::computeTfList(QList<QPair<QString, QString> > labelsArticlesPairs, QList<QPair<int, QString> > wordsCountList, QList<QRegExp> regexpList){
-        QList<QList<double> > tfList = QList<QList<double> >(); //lista wspolczynnikow tf dla artykulu
+        QList<QList<double> > tfList; //lista wspolczynnikow tf dla artykulu
+        tfList.reserve(labelsArticlesPairs.size());
         wordInArticles = QVector<int>(wordsCountList.size()); //liczba dokumentow zawierajacych przynajmniej jedno wystapienie danej etykiety
-        QPair<QString, QString> pair;
 
-            foreach(pair, labelsArticlesPairs){
-                QString article = pair.second;
-                QVector<int> counts = QVector<int>(wordsCountList.size()); //liczby wystapien poszczegolnych etykiet w artykule
-                for(int i=0; i<wordsCountList.size(); i++){
-                    counts[i] = countMatches(regexpList.at(i), article);
-                    if (counts[i] > 0){
-                        wordInArticles[i]++;
-                    }
+        foreach(const auto pair, labelsArticlesPairs){
+            QString article = pair.second;
+            QVector<int> counts = QVector<int>(wordsCountList.size()); //liczby wystapien poszczegolnych etykiet w artykule
+            for(int i=0; i<wordsCountList.size(); i++){
+                counts[i] = countMatches(regexpList.at(i), article);
+                if (counts[i] > 0){
+                    wordInArticles[i]++;
                 }
-                QList<double> tf = computeTF(counts);
-                tfList.append(tf);
-    //            for(int j=0; j<wordsCountList.size(); j++) {
-    //                std::cout<<wordsCountList.at(j).second.toAscii().data()<<" : "<<tfList.at(j)<<std::endl;
-    //            }
+            }
+            QList<double> tf = computeTF(counts);
+            tfList.append(tf);
+//            for(int j=0; j<wordsCountList.size(); j++) {
+//                std::cout<<wordsCountList.at(j).second.toAscii().data()<<" : "<<tfList.at(j)<<std::endl;
+//            }
 
         }
             return tfList;
 }
 
 QVector<double> Tfidf::computeIDF(int articlesCount, QVector<int> labelInArticles){
-    QVector<double> idf = QVector<double>(labelInArticles.size());
+    QVector<double> idf(labelInArticles.size());
     for(int i=0; i<labelInArticles.size(); i++){
         if(labelInArticles.at(i)==0){
             idf[i]=0;
@@ -72,9 +73,10 @@ QVector<double> Tfidf::computeIDF(int articlesCount, QVector<int> labelInArticle
 }
 
 QList<QList<double> > Tfidf::computeTFIDF(QList<QList<double> > tf, QVector<double> idf){
-    QList<QList<double> > tfidfList = QList<QList<double> >();
+    QList<QList<double> > tfidfList;
+    tfidfList.reserve(tf.size());
     foreach(QList<double> list, tf){
-        QList<double> tfidf = QList<double>();
+        QList<double> tfidf;
         for(int i=0; i<list.size(); i++){
             tfidf.append(list[i]*idf.at(i));
         }

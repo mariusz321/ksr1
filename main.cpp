@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
 //        QString tag = "PLACES";
 
-    QStringList labelsList = QStringList();
+    QStringList labelsList;
     labelsList.append("COFFEE");
     labelsList.append("GOLD");
     labelsList.append("SHIP");
@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     //reader.findLabels(DIRECTORY_NAME);
 
 
-    QElapsedTimer timer = QElapsedTimer();
+    QElapsedTimer timer;
     timer.start();
 
     if(SIMILARITY){
@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
         if(file.open(QIODevice::WriteOnly)){
             QTextStream out(&file);
 
-            Knn knn = Knn();
+            Knn knn;
             knn.initLabels(labelsArticlesPairs);
             std::cout<<"Czas wczytywania: "<<timer.elapsed()<<" ms"<<std::endl;
             out<<"Czas wczytywania: "<<timer.elapsed()<<" ms\n";
@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
         QList<QRegExp> regexpList = sgmlReader.getQRegExpList(wordsCountList);
 
         //TFIDF
-        Tfidf tfidf = Tfidf();
+        Tfidf tfidf;
 
         QList<QList<double> > tfList = tfidf.computeTfList(labelsArticlesPairs, wordsCountList, regexpList);//lista wspolczynnikow tf dla artykulow
         QVector<double> idfVector = tfidf.computeIDF(sgmlReader.articlesCount, tfidf.wordInArticles);
@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
         if(file.open(QIODevice::WriteOnly)){
             QTextStream out(&file);
 
-            Knn knn = Knn();
+            Knn knn;
             knn.readVetors("wektory.txt");
             std::cout<<"Czas wczytywania: "<<timer.elapsed()<<" ms"<<std::endl;
             out<<"Czas wczytywania: "<<timer.elapsed()<<" ms\n";

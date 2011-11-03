@@ -35,9 +35,9 @@ void Knn::readVetors(QString fileName){
 }
 
 void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
-    labelsList =  QList<QString>();
-    QPair<QString, QString> labelArticlePair;
-    foreach(labelArticlePair, labelsArticlesPairs){
+    labelsList = QList<QString>();
+    labelsList.reserve(labelsArticlesPairs.size());
+    foreach(const auto labelArticlePair, labelsArticlesPairs){
         labelsList.append(labelArticlePair.first);
     }
 
@@ -48,12 +48,12 @@ void Knn::testDistance(QTextStream &out){
 
     int NUM_THREADS = QThread::idealThreadCount();
 
-    QList<QList<QPair<int, int> > *> resultList = QList<QList<QPair<int, int> > *>();
+    QList<QList<QPair<int, int> > *> resultList;
     for(int i=0; i<NUM_THREADS; i++){
         resultList.append(new QList<QPair<int, int> >());
     }
 
-    QList<KnnThread *> threadsList = QList<KnnThread *>();
+    QList<KnnThread *> threadsList;
     QList<MetricInterface *> metricsList;
     for(int i=0; i<NUM_THREADS; i++){
         MetricInterface *metric = MetricFactory::getNewMetric("euclidean");
@@ -92,14 +92,14 @@ void Knn::testDistance(QTextStream &out){
 void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QSet<QString> allWordsSet){
     int index = floor(wordSetList.size()*0.6);
 
-    int NUM_THREADS = 4;
+    int NUM_THREADS = QThread::idealThreadCount();
 
-    QList<QList<QPair<int, int> > *> resultList = QList<QList<QPair<int, int> > *>();
+    QList<QList<QPair<int, int> > *> resultList;
     for(int i=0; i<NUM_THREADS; i++){
         resultList.append(new QList<QPair<int, int> >());
     }
 
-    QList<KnnSimilarityThread *> threadsList = QList<KnnSimilarityThread *>();
+    QList<KnnSimilarityThread *> threadsList;
     for(int i=0; i<NUM_THREADS; i++){
         KnnSimilarityThread *thread = new KnnSimilarityThread(wordSetList, allWordsSet, labelsList, index, index+i, *this, QString().setNum(i+1), NUM_THREADS, resultList.at(i));
         threadsList.append(thread);

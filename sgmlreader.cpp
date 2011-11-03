@@ -20,8 +20,8 @@ void SgmlReader::findLabels(QString dirName){
 
     int articles=0;
 
-    QMap<QString, int> map = QMap<QString, int>();
-    foreach (QFileInfo fileInfo, fileInfoList) {
+    QMap<QString, int> map;
+    foreach (const QFileInfo fileInfo, fileInfoList) {
         std::cout<<fileInfo.absoluteFilePath().toAscii().data()<<std::endl;
 
         QFile file(fileInfo.absoluteFilePath());
@@ -64,11 +64,11 @@ void SgmlReader::findLabels(QString dirName){
 }
 
 QList<QPair<QString, QString> > SgmlReader::readDirectory(QString dirName){
-    QDir directory = QDir(dirName);
+    QDir directory(dirName);
     QFileInfoList fileInfoList = directory.entryInfoList();
     labelsArticlesPairs = QList<QPair<QString, QString> >();
 
-    foreach (QFileInfo fileInfo, fileInfoList) {
+    foreach (const QFileInfo &fileInfo, fileInfoList) {
         std::cout<<fileInfo.absoluteFilePath().toAscii().data()<<std::endl;
 
         QFile file(fileInfo.absoluteFilePath());
@@ -130,10 +130,9 @@ QList<QPair<QString, QString> > SgmlReader::readDirectory(QString dirName){
 
 // tworzy mape: slowo na liczbe wystapien
 QMap<QString, int> SgmlReader::countWords(QList<QPair<QString, QString> > labelsArticlesPairs){
-    QMap<QString, int> wordToCountMap = QMap<QString, int>(); //mapa slowo-liczba_wystapien
+    QMap<QString, int> wordToCountMap; //mapa slowo-liczba_wystapien
     QRegExp wordRegExp = QRegExp("\\b[a-z]+(-[a-z]+)*\\b", Qt::CaseInsensitive);
-    QPair<QString, QString> pair;
-    foreach(pair, labelsArticlesPairs){
+    foreach(const auto pair, labelsArticlesPairs){
         int pos = 0;
         while ((pos = wordRegExp.indexIn(pair.second, pos)) != -1) {
             pos += wordRegExp.matchedLength();
@@ -147,12 +146,12 @@ QMap<QString, int> SgmlReader::countWords(QList<QPair<QString, QString> > labels
 
 // tworzy liste zbiorow wyrazow dla kazdego artykulu
 QList<QSet<QString> > SgmlReader::getWordSets(QList<QPair<QString, QString> > labelsArticlesPairs, QSet<QString> allWordsSet){
-    QList<QSet<QString> > wordSetList = QList<QSet<QString> >(); //mapa slowo-liczba_wystapien
+    QList<QSet<QString> > wordSetList; //mapa slowo-liczba_wystapien
+    wordSetList.reserve(labelsArticlesPairs.size());
     QRegExp wordRegExp = QRegExp("\\b[a-z]+(-[a-z]+)*\\b", Qt::CaseInsensitive);
-    QPair<QString, QString> pair;
-    foreach(pair, labelsArticlesPairs){
+    foreach(const auto pair, labelsArticlesPairs){
         int pos = 0;
-        QSet<QString> stringSet = QSet<QString>();
+        QSet<QString> stringSet;
         while ((pos = wordRegExp.indexIn(pair.second, pos)) != -1) {
             pos += wordRegExp.matchedLength();
             QString word = wordRegExp.cap();
@@ -168,8 +167,9 @@ QList<QSet<QString> > SgmlReader::getWordSets(QList<QPair<QString, QString> > la
 
 
 QList<QPair<int, QString> > SgmlReader::getWordsCountList(QMap<QString, int> wordToCountMap, float listCutStart=-1, float listCutLen=-1){
-    QList<QPair<int, QString> > wordsCountList = QList<QPair<int, QString> >(); //lista par liczba_wystapien-slowo
-    QMapIterator<QString, int> i = QMapIterator<QString, int>(wordToCountMap);
+    QList<QPair<int, QString> > wordsCountList; //lista par liczba_wystapien-slowo
+    wordsCountList.reserve(wordToCountMap.size());
+    QMapIterator<QString, int> i(wordToCountMap);
     while(i.hasNext()){
         i.next();
         wordsCountList.append(QPair<int, QString>(i.value(), i.key()));
@@ -184,8 +184,7 @@ QList<QPair<int, QString> > SgmlReader::getWordsCountList(QMap<QString, int> wor
     QFile file("mapa.txt");
     if(file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
-        QPair<int, QString> countWordPair;
-        foreach(countWordPair, wordsCountList){
+        foreach(const auto countWordPair, wordsCountList){
             out<<countWordPair.second<<"\t"<<countWordPair.first<<endl;
         }
         file.close();
@@ -195,9 +194,9 @@ QList<QPair<int, QString> > SgmlReader::getWordsCountList(QMap<QString, int> wor
 
 QSet<QString> SgmlReader::getAllWordsSet(QMap<QString, int> wordToCountMap, float listCutStart=-1, float listCutLen=-1){
     QList<QPair<int, QString> > wordsCountList = getWordsCountList(wordToCountMap, listCutStart, listCutLen);
-    QSet<QString> allWordsSet = QSet<QString>();
-    QPair<int, QString> pair;
-    foreach(pair, wordsCountList){
+    QSet<QString> allWordsSet;
+    allWordsSet.reserve(wordsCountList.size());
+    foreach(const auto pair, wordsCountList){
         allWordsSet.insert(pair.second);
     }
     return allWordsSet;
@@ -205,9 +204,9 @@ QSet<QString> SgmlReader::getAllWordsSet(QMap<QString, int> wordToCountMap, floa
 
 
 QList<QRegExp> SgmlReader::getQRegExpList(QList<QPair<int, QString> > pairList){
-    QList<QRegExp> regexpList = QList<QRegExp>();
-    QPair<int, QString> pair;
-    foreach(pair, pairList){
+    QList<QRegExp> regexpList;
+    regexpList.reserve(pairList.size());
+    foreach(const auto pair, pairList){
         regexpList.append(QRegExp("\\b"+pair.second+"\\b", Qt::CaseInsensitive));
     }
     return regexpList;
