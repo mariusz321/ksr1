@@ -1,12 +1,13 @@
 #include "knnthread.h"
+#include "MetricInterface.h"
 #include <iostream>
 
-KnnThread::KnnThread(const QList<QVector<double> > &vectorList, const QList<QString> &labelsList, int index1, int index2, Knn &knn, QString name, int numThreads, QList<QPair<int, int> > *resultList) :
+KnnThread::KnnThread(const QList<QVector<double> > &vectorList, const QList<QString> &labelsList, int index1, int index2, QString name, int numThreads, QList<QPair<int, int> > *resultList, const MetricInterface *metric) :
     vectorList(vectorList),
     labelsList(labelsList),
     index1(index1),
     index2(index2),
-    knn(knn),
+    mMetric(metric),
     name(name),
     numThreads(numThreads)
 {
@@ -30,7 +31,7 @@ void KnnThread::run(){
             std::cout<<i<<std::endl;//////
             out<<"\n\nWektor: "<<i<<"\n";//////
             for(int j=0; j<index1; j++){
-                distance = knn.normalizedDistance(vectorList.at(i), vectorList.at(j));
+                distance = mMetric->distance(vectorList.at(i), vectorList.at(j));
                 QPair<double, int> distancePair(distance, j);
                 distancePairVector[j]=distancePair;
             }

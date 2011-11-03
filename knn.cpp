@@ -3,6 +3,8 @@
 #include <iostream>
 #include "knnthread.h"
 #include "knnsimilaritythread.h"
+#include "MetricInterface.h"
+#include "MetricFactory.h"
 
 Knn::Knn()
 {
@@ -39,16 +41,6 @@ void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
         labelsList.append(labelArticlePair.first);
     }
 
-}
-
-double Knn::euclideanDistance(QVector<double> vect1, QVector<double> vect2){
-    double sum = 0;
-    double temp;
-    for(int i = 0; i<vect1.size(); i++ ){
-        temp = vect1.at(i)-vect2.at(i);
-        sum += temp*temp;
-    }
-    return sqrt(sum);
 }
 
 double Knn::manhattanDistance(const QVector<double> &vect1, const QVector<double> &vect2) const {
@@ -100,8 +92,11 @@ void Knn::testDistance(QTextStream &out){
     }
 
     QList<KnnThread *> threadsList = QList<KnnThread *>();
+    QList<MetricInterface *> metricsList;
     for(int i=0; i<NUM_THREADS; i++){
-        KnnThread *thread = new KnnThread(vectorsList, labelsList, index, index+i, *this, QString().setNum(i+1), NUM_THREADS, resultList.at(i));
+        MetricInterface *metric = MetricFactory::getNewMetric("euclidean");
+        metricsList.append(metric);
+        KnnThread *thread = new KnnThread(vectorsList, labelsList, index, index+i, QString().setNum(i+1), NUM_THREADS, resultList.at(i), metric);
         threadsList.append(thread);
         thread->start();
     }
@@ -109,6 +104,7 @@ void Knn::testDistance(QTextStream &out){
     for(int i=0; i<threadsList.size(); i++){
         threadsList.at(i)->wait();
         delete threadsList.at(i);
+        delete metricsList.at(i);
     }
 
     for(int k=0; k<resultList.at(0)->size(); k++){

@@ -5,10 +5,12 @@
 #include<QMapIterator>
 #include "knn.h"
 
+class MetricInterface;
+
 class KnnThread: public QThread
 {
 public:
-    KnnThread(const QList<QVector<double> > &, const QList<QString> &, int, int, Knn &, QString, int, QList<QPair<int, int> >*);
+    KnnThread(const QList<QVector<double> > &, const QList<QString> &, int, int, QString, int, QList<QPair<int, int> >*, const MetricInterface *metric);
     void run();
 
 private:
@@ -16,7 +18,7 @@ private:
     const QList<QString> labelsList;
     const int index1;
     const int index2;
-    Knn knn;
+    const MetricInterface *mMetric;
     const QString name;
     const int numThreads;
     QList<QPair<int, int> > *resultList;

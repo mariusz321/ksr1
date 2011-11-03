@@ -21,14 +21,30 @@ SOURCES += main.cpp \
     knnthread.cpp \
     knn.cpp \
     sgmlreader.cpp \
-    knnsimilaritythread.cpp
+    knnsimilaritythread.cpp \
+    EuclideanMetric.cpp \
+    MetricInterface.cpp \
+    MetricFactory.cpp
 
 HEADERS += \
     tfidf.h \
     knnthread.h \
     knn.h \
     sgmlreader.h \
-    knnsimilaritythread.h
+    knnsimilaritythread.h \
+    MetricInterface.h \
+    EuclideanMetric.h \
+    MetricFactory.h
+
+
+
+
+
+
+
+
+
+
 
 
 
