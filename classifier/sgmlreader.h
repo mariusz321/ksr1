@@ -1,12 +1,11 @@
 #ifndef SGMLREADER_H
 #define SGMLREADER_H
 
-#include <QFile>
-#include <QDir>
 #include <QPair>
 #include <QMap>
 #include <QSet>
-#include <QTextStream>
+#include <QRegExp>
+#include <QStringList>
 
 class SgmlReader
 {

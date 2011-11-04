@@ -1,4 +1,8 @@
 #include "sgmlreader.h"
+
+#include <QTextStream>
+#include <QDir>
+#include <QFile>
 #include <iostream>
 #include <cmath>
 
