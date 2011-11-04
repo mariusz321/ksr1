@@ -14,12 +14,13 @@ QVector<Element> NGramLoader::loadData(const QStringList &arguments)
     QTextStream in(&file);
 
     QVector<Element> result;
-    QVector<double> *sizes = new QVector<double>();
-    sizes->append(NGRAM_SIZE);
 
     while (!in.atEnd()) {
         Element e;
         e.label = in.readLine();
+
+        QVector<double> *sizes = new QVector<double>();
+        sizes->append(NGRAM_SIZE);
 
         const QStringList words = in.readLine().split(' ', QString::SkipEmptyParts);
         QHash<QString, int> *ngrams = new QHash<QString, int>();
@@ -28,6 +29,11 @@ QVector<Element> NGramLoader::loadData(const QStringList &arguments)
                 ++((*ngrams)[words.at(i).mid(j, NGRAM_SIZE)]);
             }
         }
+        int ngramCount = 0;
+        for (auto it = ngrams->constBegin(); it != ngrams->constEnd(); it++) {
+            ngramCount += it.value();
+        }
+        sizes->append(ngramCount);
         e.ngrams = ngrams;
         e.ngramSizes = sizes;
         result.append(e);
@@ -40,6 +46,6 @@ void NGramLoader::clean(const QVector<Element> &elements)
 {
     for (int i = 0; i < elements.size(); i++) {
         delete elements.at(i).ngrams;
+        delete elements.at(i).ngramSizes;
     }
-    delete elements.at(0).ngramSizes;
 }
