@@ -85,7 +85,6 @@ int main(int argc, char *argv[])
             QTextStream out(&file);
 
             Knn knn;
-            knn.readVetors("wektory.txt");
             std::cout<<"Czas wczytywania: "<<timer.elapsed()<<" ms"<<std::endl;
             out<<"Czas wczytywania: "<<timer.elapsed()<<" ms\n";
             knn.testDistance(out);

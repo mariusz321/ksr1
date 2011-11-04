@@ -6,7 +6,9 @@
 class ChebyshevMetric : public MetricInterface
 {
 public:
-    double distance(const QVector<double> &vect1, const QVector<double> &vect2) const;
+    QVector<Element> loadData(const QStringList &arguments) const;
+    double distance(const Element &e1, const Element &e2) const;
+    void clean(const QVector<Element> &elements) const;
 };
 
 #endif // CHEBYSHEVMETRIC_H

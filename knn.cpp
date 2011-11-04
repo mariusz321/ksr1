@@ -11,29 +11,6 @@ Knn::Knn()
 
 }
 
-void Knn::readVetors(QString fileName){
-    QFile file(fileName);
-    file.open(QIODevice::ReadOnly);
-    QTextStream in(&file);
-
-    vectorsList = QList<QVector<double> >();
-    labelsList =  QList<QString>();
-
-    while (!in.atEnd()) {
-        QString line = in.readLine();
-        labelsList.append(line);
-
-        line = in.readLine();
-        line.remove(QRegExp("\\[|\\]"));
-        QStringList stringList = line.split(";");
-        QVector<double> vect = QVector<double>(stringList.size());
-        for(int i =0; i<stringList.size(); i++){
-            vect[i] = stringList.at(i).toDouble();
-        }
-        vectorsList.append(vect);
-    }
-}
-
 void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
     labelsList = QList<QString>();
     labelsList.reserve(labelsArticlesPairs.size());
@@ -44,7 +21,6 @@ void Knn::initLabels(QList<QPair<QString, QString> > labelsArticlesPairs){
 }
 
 void Knn::testDistance(QTextStream &out){
-    int index = floor(vectorsList.size()*0.6);
 
     int NUM_THREADS = QThread::idealThreadCount();
 
@@ -53,12 +29,15 @@ void Knn::testDistance(QTextStream &out){
         resultList.append(new QList<QPair<int, int> >());
     }
 
+    MetricInterface *metric = MetricFactory::getNewMetric("euclidean");
+
+    const QVector<Element> elements = metric->loadData(QStringList() << "wektory.txt");
+
+    int index = floor(elements.size()*0.6);
+
     QList<KnnThread *> threadsList;
-    QList<MetricInterface *> metricsList;
     for(int i=0; i<NUM_THREADS; i++){
-        MetricInterface *metric = MetricFactory::getNewMetric("euclidean");
-        metricsList.append(metric);
-        KnnThread *thread = new KnnThread(vectorsList, labelsList, index, index+i, QString().setNum(i+1), NUM_THREADS, resultList.at(i), metric);
+        KnnThread *thread = new KnnThread(elements, index, index+i, QString().setNum(i+1), NUM_THREADS, resultList.at(i), metric);
         threadsList.append(thread);
         thread->start();
     }
@@ -66,8 +45,10 @@ void Knn::testDistance(QTextStream &out){
     for(int i=0; i<threadsList.size(); i++){
         threadsList.at(i)->wait();
         delete threadsList.at(i);
-        delete metricsList.at(i);
     }
+
+    metric->clean(elements);
+    delete metric;
 
     for(int k=0; k<resultList.at(0)->size(); k++){
         int success = 0;

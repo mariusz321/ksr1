@@ -1,10 +1,11 @@
 #include "knnthread.h"
 #include "MetricInterface.h"
+#include "Element.h"
+
 #include <iostream>
 
-KnnThread::KnnThread(const QList<QVector<double> > &vectorList, const QList<QString> &labelsList, int index1, int index2, QString name, int numThreads, QList<QPair<int, int> > *resultList, const MetricInterface *metric) :
-    vectorList(vectorList),
-    labelsList(labelsList),
+KnnThread::KnnThread(const QVector<Element> &elementsVector, int index1, int index2, QString name, int numThreads, QList<QPair<int, int> > *resultList, const MetricInterface *metric) :
+    mElementsVector(elementsVector),
     index1(index1),
     index2(index2),
     mMetric(metric),
@@ -27,11 +28,11 @@ void KnnThread::run(){
     if(file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
 
-        for(int i=index2; i<vectorList.size(); i+=numThreads){ //wektory niesklasyfikowane
+        for (int i = index2; i < mElementsVector.size(); i += numThreads) { //wektory niesklasyfikowane
             std::cout<<i<<std::endl;//////
             out<<"\n\nWektor: "<<i<<"\n";//////
             for(int j=0; j<index1; j++){
-                distance = mMetric->distance(vectorList.at(i), vectorList.at(j));
+                distance = mMetric->distance(mElementsVector.at(i), mElementsVector.at(j));
                 QPair<double, int> distancePair(distance, j);
                 distancePairVector[j]=distancePair;
             }
@@ -39,7 +40,7 @@ void KnnThread::run(){
             for(int k=1; k<=100; k++){
                 QMap<QString, int> labelsToCountMap;
                 for(int a=0; a<k && a<distancePairVector.size(); a++){
-                    labelsToCountMap[labelsList.at(distancePairVector.at(a).second)]++;
+                    labelsToCountMap[mElementsVector.at(distancePairVector.at(a).second).label]++;
                 }
                 QString resultLabel;
                 int largestCount = -1;
@@ -54,10 +55,10 @@ void KnnThread::run(){
                 }
                 out<<endl<<"k = "<<k<<endl;
                 out<<"ResultLabel = "<<resultLabel<<endl;
-                out<<"RealLabel = "<<labelsList.at(i)<<endl;
+                out<<"RealLabel = "<<mElementsVector.at(i).label<<endl;
                 out.flush();
 
-                if(resultLabel==labelsList.at(i)){
+                if(resultLabel==mElementsVector.at(i).label){
                     (*resultList)[k-1].first++;
                 }else{
                     (*resultList)[k-1].second++;
