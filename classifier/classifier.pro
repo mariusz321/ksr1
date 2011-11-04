@@ -8,7 +8,7 @@ QT       += core
 
 QT       -= gui
 
-TARGET = KSR1
+TARGET = classifier
 CONFIG   += console
 CONFIG   -= app_bundle
 
@@ -44,38 +44,3 @@ HEADERS += \
     NormalizedMetric.h \
     VectorLoader.h \
     Element.h
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
