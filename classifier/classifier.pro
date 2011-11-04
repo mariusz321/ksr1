@@ -28,7 +28,9 @@ SOURCES += main.cpp \
     ManhattanMetric.cpp \
     ChebyshevMetric.cpp \
     NormalizedMetric.cpp \
-    VectorLoader.cpp
+    VectorLoader.cpp \
+    NGramLoader.cpp \
+    NGramMetric.cpp
 
 HEADERS += \
     tfidf.h \
@@ -43,4 +45,10 @@ HEADERS += \
     ChebyshevMetric.h \
     NormalizedMetric.h \
     VectorLoader.h \
-    Element.h
+    Element.h \
+    NGramLoader.h \
+    NGramMetric.h
+
+
+
+
