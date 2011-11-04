@@ -27,6 +27,7 @@ QVector<Element> VectorLoader::loadData(const QStringList &arguments)
         e.features = vect;
         result.append(e);
     }
+    file.close();
     return result;
 }
 
