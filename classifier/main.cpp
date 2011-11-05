@@ -9,7 +9,7 @@
 
 int main(int argc, char *argv[])
 {
-    //QCoreApplication a(argc, argv);
+    QCoreApplication a(argc, argv);
 
     QString DIRECTORY_NAME = QString("texts");
     bool KNN = true;
