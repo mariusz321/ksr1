@@ -28,6 +28,23 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
     for (int i = 0; i < articlesWords.size(); i++) {
         allWords.unite(articlesWords.at(i));
     }
+    QHash<QString, int> decimator;
+    decimator.reserve(allWords.size());
+    for (int i = 0; i < articlesWords.size(); i++) {
+        for (int j = 0; j < articlesWords.at(i).size(); j++) {
+            decimator[articlesWords.at(i).values().at(j)]++;
+        }
+    }
+    int threshold = 0.6 * articles.size();
+    for (int i = 0; i < decimator.size(); i++) {
+        if (decimator.values().at(i) >= threshold) {
+            const QString key = decimator.keys().at(i);
+            for (int j = 0; j < articlesWords.size(); j++) {
+                articlesWords[j].remove(key);
+            }
+            allWords.remove(key);
+        }
+    }
 #if 0
     QStringList listall;
     listall.reserve(allWords.size());
