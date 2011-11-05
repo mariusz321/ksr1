@@ -103,8 +103,10 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
             failure += resultList.at(i)->at(k).second;
         }
 
-        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<std::endl;
-        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<"\n";
+        float successProc = 100.0*success/(success+failure);
+        float failureProc = 100-successProc;
+        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<std::endl;
+        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<"\n";
     }
 
     for (int i = 0; i < resultList.size(); i++) {
