@@ -6,8 +6,8 @@
 class DiscriminatingExtractor : public KeywordExtractorInterface
 {
 public:
-   QList<QPair<QString, double> > extractKeywords(const QList<QPair<QString, QString> > &articles) const;
-   double getSimiliarity(const QVector<QSet<QString> > &articlesWords) const;
+   QList<QPair<QString, kwreal> > extractKeywords(const QList<QPair<QString, QString> > &articles) const;
+   kwreal getSimiliarity(const QVector<QSet<QString> > &articlesWords) const;
 };
 
 #endif // DISCRIMINATINGEXTRACTOR_H

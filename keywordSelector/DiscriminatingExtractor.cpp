@@ -2,9 +2,9 @@
 
 #include <QDebug>
 
-QList<QPair<QString, double> > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
+QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
-    QList<QPair<QString, double> > result;
+    QList<QPair<QString, kwreal> > result;
     QVector<QSet<QString> > articlesWords;
     QSet<QString> allWords;
     articlesWords.reserve(articles.size());
@@ -27,18 +27,23 @@ QList<QPair<QString, double> > DiscriminatingExtractor::extractKeywords(const QL
     for (int i = 0; i < articlesWords.size(); i++) {
         allWords.unite(articlesWords.at(i));
     }
-    const double g = getSimiliarity(articlesWords);
+    const kwreal g = getSimiliarity(articlesWords);
     qDebug() << "g:" << g;
-    QList<QPair<double, QString> > sortList;
-    sortList.reserve(allWords.size());
+    kwreal *sortBuf = new kwreal[allWords.size()];
+#pragma omp parallel for
     for (int i = 0; i < allWords.size(); i++) {
         QVector<QSet<QString> > subtractedWords = articlesWords;
         for (int j = 0; j < subtractedWords.size(); j++) {
             subtractedWords[j].remove(allWords.values().at(i));
         }
-        const double p = getSimiliarity(subtractedWords);
-        sortList.append(qMakePair(p - g, allWords.values().at(i)));
+        sortBuf[i] = getSimiliarity(subtractedWords);
     }
+    QList<QPair<kwreal, QString> > sortList;
+    sortList.reserve(allWords.size());
+    for (int i = 0; i < allWords.size(); i++) {
+        sortList.append(qMakePair(sortBuf[i] - g, allWords.values().at(i)));
+    }
+    delete [] sortBuf;
     qSort(sortList);
     result.reserve(sortList.size());
     foreach (const auto pair, sortList) {
@@ -47,17 +52,17 @@ QList<QPair<QString, double> > DiscriminatingExtractor::extractKeywords(const QL
     return result;
 }
 
-double DiscriminatingExtractor::getSimiliarity(const QVector<QSet<QString> > &articlesWords) const
+kwreal DiscriminatingExtractor::getSimiliarity(const QVector<QSet<QString> > &articlesWords) const
 {
     const int size = articlesWords.size();
-    double sum = 0;
+    kwreal sum = 0;
     for (int i = 0; i < size; i++) {
         for (int j = i + 1; j < size; j++) {
             QSet<QString> intersected = articlesWords.at(i);
             intersected.intersect(articlesWords.at(j));
             QSet<QString> united = articlesWords.at(i);
             united.unite(articlesWords.at(j));
-            sum += decltype(sum)(intersected.size()) / decltype(sum)(united.size());
+            sum += kwreal(intersected.size()) / kwreal(united.size());
         }
     }
     sum *= 2;

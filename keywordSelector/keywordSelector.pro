@@ -14,7 +14,9 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -std=c++0x
+QMAKE_CXXFLAGS += -std=c++0x -fopenmp -O3 -mtune=native -march=native
+
+LIBS += -lgomp
 
 SOURCES += main.cpp \
     ArticleLoader.cpp \

@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
     
     const QList<QPair<QString, QString> > articles = ArticleLoader::loadFromFile(a.arguments().at(1));
     KeywordExtractorInterface *kwi = new DiscriminatingExtractor();
-    const QList<QPair<QString, double> > kw = kwi->extractKeywords(articles);
+    const QList<QPair<QString, kwreal> > kw = kwi->extractKeywords(articles);
     delete kwi;
     for (int i = 0; i < kw.size(); i++) {
         qDebug() << kw.at(i).first << kw.at(i).second;

@@ -4,10 +4,12 @@
 #include <QStringList>
 #include <QPair>
 
+typedef float kwreal;
+
 class KeywordExtractorInterface
 {
 public:
-    virtual QList<QPair<QString, double> > extractKeywords(const QList<QPair<QString, QString> > &articles) const = 0;
+    virtual QList<QPair<QString, kwreal> > extractKeywords(const QList<QPair<QString, QString> > &articles) const = 0;
 };
 
 #endif // KEYWORDEXTRACTORINTERFACE_H
