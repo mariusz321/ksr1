@@ -2,6 +2,8 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     classifier \
-    sgmlExtractor
+    sgmlExtractor \
+    keywordSelector
+
 
 
