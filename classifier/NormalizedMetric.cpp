@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "NormalizedMetric.h"
 #include "VectorLoader.h"
 
@@ -25,9 +26,9 @@ double NormalizedMetric::distance(const Element &e1, const Element &e2) const
     return sqrt(sum);
 }
 
-QVector<Element> NormalizedMetric::loadData(const QStringList &arguments) const
+QVector<Element> NormalizedMetric::loadData(const QStringList &arguments, const bool &normalize) const
 {
-    return VectorLoader::loadData(arguments);
+    return VectorLoader::loadData(arguments, normalize);
 }
 
 void NormalizedMetric::clean(const QVector<Element> &elements) const

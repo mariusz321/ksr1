@@ -1,5 +1,5 @@
+#undef __STRICT_ANSI__
 #include "sgmlreader.h"
-
 #include <QTextStream>
 #include <QDir>
 #include <QFile>

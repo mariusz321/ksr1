@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "knnthread.h"
 #include "MetricInterface.h"
 #include "Element.h"

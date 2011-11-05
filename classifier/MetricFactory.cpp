@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "MetricFactory.h"
 #include "EuclideanMetric.h"
 #include "ManhattanMetric.h"
@@ -7,19 +8,18 @@
 
 #include <QString>
 
-MetricInterface *MetricFactory::getNewMetric(const QString &name)
+MetricInterface *MetricFactory::getNewMetric(int metric)
 {
-    if (name == "euclidean") {
-        return new EuclideanMetric();
-    } else if (name == "manhattan") {
-        return new ManhattanMetric();
-    } else if (name == "chebyshev") {
-        return new ChebyshevMetric();
-    } else if (name == "normalized") {
-        return new NormalizedMetric();
-    } else if (name == "ngram") {
-        return new NGramMetric();
-    } else {
-        return nullptr;
+    switch(metric){
+        case EUCLIDEAN:
+            return new EuclideanMetric();
+        case MANHATTAN:
+            return new ManhattanMetric();
+        case CHEBYSHEV:
+            return new ChebyshevMetric();
+        case NORMALIZED:
+            return new NormalizedMetric();
+        default:
+            return new NGramMetric();
     }
 }

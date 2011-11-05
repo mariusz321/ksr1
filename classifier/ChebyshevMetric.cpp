@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "ChebyshevMetric.h"
 #include "VectorLoader.h"
 
@@ -18,9 +19,9 @@ double ChebyshevMetric::distance(const Element &e1, const Element &e2) const
     return max;
 }
 
-QVector<Element> ChebyshevMetric::loadData(const QStringList &arguments) const
+QVector<Element> ChebyshevMetric::loadData(const QStringList &arguments, const bool &normalize) const
 {
-    return VectorLoader::loadData(arguments);
+    return VectorLoader::loadData(arguments, normalize);
 }
 
 void ChebyshevMetric::clean(const QVector<Element> &elements) const

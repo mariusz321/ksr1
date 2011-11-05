@@ -8,7 +8,7 @@
 class VectorLoader
 {
 public:
-    static QVector<Element> loadData(const QStringList &arguments);
+    static QVector<Element> loadData(const QStringList &arguments, const bool &normalize);
     static void clean(const QVector<Element> &elements);
 };
 

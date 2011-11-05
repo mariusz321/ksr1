@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "tfidf.h"
 #include <cmath>
 

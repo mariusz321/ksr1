@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "NGramMetric.h"
 #include "NGramLoader.h"
 
@@ -23,7 +24,7 @@ double NGramMetric::distance(const Element &e1, const Element &e2) const
     return result;
 }
 
-QVector<Element> NGramMetric::loadData(const QStringList &arguments) const
+QVector<Element> NGramMetric::loadData(const QStringList &arguments, const bool &normalize) const
 {
     return NGramLoader::loadData(QStringList() << "output_100.dat");
 }

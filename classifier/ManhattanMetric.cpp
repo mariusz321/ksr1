@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "ManhattanMetric.h"
 #include "VectorLoader.h"
 
@@ -15,9 +16,9 @@ double ManhattanMetric::distance(const Element &e1, const Element &e2) const
     return sum;
 }
 
-QVector<Element> ManhattanMetric::loadData(const QStringList &arguments) const
+QVector<Element> ManhattanMetric::loadData(const QStringList &arguments, const bool &normalize) const
 {
-    return VectorLoader::loadData(arguments);
+    return VectorLoader::loadData(arguments, normalize);
 }
 
 void ManhattanMetric::clean(const QVector<Element> &elements) const

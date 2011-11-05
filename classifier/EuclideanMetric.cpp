@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "EuclideanMetric.h"
 #include "VectorLoader.h"
 
@@ -16,9 +17,9 @@ double EuclideanMetric::distance(const Element &e1, const Element &e2) const
     return sqrt(sum);
 }
 
-QVector<Element> EuclideanMetric::loadData(const QStringList &arguments) const
+QVector<Element> EuclideanMetric::loadData(const QStringList &arguments, const bool &normalize) const
 {
-    return VectorLoader::loadData(arguments);
+    return VectorLoader::loadData(arguments, normalize);
 }
 
 void EuclideanMetric::clean(const QVector<Element> &elements) const

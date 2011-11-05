@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include <QtCore/QCoreApplication>
 #include <QElapsedTimer>
 #include <iostream>
@@ -8,33 +9,33 @@
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication a(argc, argv);
+    //QCoreApplication a(argc, argv);
 
     QString DIRECTORY_NAME = QString("texts");
-    bool KNN = false;
+    bool KNN = true;
     bool EXTRACTION = false;
-    bool SIMILARITY = true;
+    bool SIMILARITY = false;
 
-//        QStringList labelsList = QStringList();
-//        labelsList.append("WEST-GERMANY");
-//        labelsList.append("USA");
-//        labelsList.append("FRANCE");
-//        labelsList.append("UK");
-//        labelsList.append("CANADA");
-//        labelsList.append("JAPAN");
+       QStringList labelsList = QStringList();
+       labelsList.append("WEST-GERMANY");
+       labelsList.append("USA");
+       labelsList.append("FRANCE");
+       labelsList.append("UK");
+       labelsList.append("CANADA");
+       labelsList.append("JAPAN");
 
-//        QString tag = "PLACES";
+       QString tag = "PLACES";
 
-    QStringList labelsList;
-    labelsList.append("COFFEE");
-    labelsList.append("GOLD");
-    labelsList.append("SHIP");
-    labelsList.append("SUGAR");
+//    QStringList labelsList;
+//    labelsList.append("COFFEE");
+//    labelsList.append("GOLD");
+//    labelsList.append("SHIP");
+//    labelsList.append("SUGAR");
 
-    QString tag = "TOPICS";
+//    QString tag = "TOPICS";
 
     SgmlReader sgmlReader = SgmlReader(labelsList, tag);
-    //reader.findLabels(DIRECTORY_NAME);
+    //sgmlReader.findLabels(DIRECTORY_NAME);
 
 
     QElapsedTimer timer;
@@ -90,6 +91,7 @@ int main(int argc, char *argv[])
             knn.testDistance(out);
 
             //czas obliczen
+            std::cout<<"Czas obliczen: "<<timer.elapsed()<<std::endl;
             out<<endl<<"Czas obliczen: "<<timer.elapsed()<<" ms\n";
 
             file.close();

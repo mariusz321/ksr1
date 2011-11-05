@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "ArticleWriter.h"
 
 #include <QTextStream>

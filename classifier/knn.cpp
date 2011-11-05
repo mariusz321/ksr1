@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "knn.h"
 #include <cmath>
 #include <iostream>
@@ -29,9 +30,10 @@ void Knn::testDistance(QTextStream &out){
         resultList.append(new QList<QPair<int, int> >());
     }
 
-    MetricInterface *metric = MetricFactory::getNewMetric("euclidean");
+    //MetricInterface *metric = MetricFactory::getNewMetric("euclidean");
+    MetricInterface *metric = MetricFactory::getNewMetric(MetricFactory::EUCLIDEAN);
 
-    const QVector<Element> elements = metric->loadData(QStringList() << "wektory.txt");
+    const QVector<Element> elements = metric->loadData(QStringList() << "wektory.txt", true);
 
     int index = floor(elements.size()*0.6);
 
@@ -58,9 +60,10 @@ void Knn::testDistance(QTextStream &out){
             failure += resultList.at(i)->at(k).second;
         }
 
-
-        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<std::endl;
-        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<", Bledne = "<<failure<<"\n";
+        float successProc = 100.0*success/(success+failure);
+        float failureProc = 100-successProc;
+        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<std::endl;
+        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<"\n";
     }
 
     for (int i = 0; i < resultList.size(); i++) {
