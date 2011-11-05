@@ -12,8 +12,8 @@
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
-    if (a.arguments().size() < 2) {
-        qFatal("usage: %s [input file]\n", argv[0]);
+    if (a.arguments().size() < 3) {
+        qFatal("usage: %s [input file] [output file]\n", argv[0]);
     }
     
     QList<QPair<QString, QString> > articles;
@@ -36,15 +36,15 @@ int main(int argc, char *argv[])
         qDebug() << "extraction took" << extractMsecs << "msecs";
     }
     delete kwi;
-    QFile file("keyword.txt");
+    QFile file(a.arguments().at(2));
     if(file.open(QIODevice::WriteOnly)){
             QTextStream out(&file);
             for (int i = 0; i < kw.size(); i++) {
                 qDebug() << kw.at(i).first << kw.at(i).second;
-                out<<kw.at(i).first << kw.at(i).second<<endl;
+                out << kw.at(i).first << " " << kw.at(i).second << endl;
             }
     }
-
+    file.close();
 
     return 0;
 }
