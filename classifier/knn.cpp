@@ -130,5 +130,25 @@ double Knn::smcSimilarity(QSet<QString> set1, QSet<QString> set2, QSet<QString> 
     return 1.0*(set1.intersect(set2).size()+notSet1.intersect(notSet2).size())/allWordsSet.size();
 }
 
+double Knn::ngramSimilarity(QSet<QString> set1, QSet<QString> set2){
+    #define NGRAM_SIZE 4
+    double sum = 0;
+    int ngrams = 0;
+     for (QSet<QString>::const_iterator it1 = set1.constBegin(); it1!=set1.constEnd(); it1++) { //slowa pierwszego zbioru
+        for (QSet<QString>::const_iterator it2 = set2.constBegin(); it2!=set2.constEnd(); it2++) { //slowa drugiego zbioru
+            double tempSum = 0;
+            for (int i = 0; i < it1->size() - NGRAM_SIZE + 1; i++) { //podciagi slowa z pierwszego zbioru
+                if(it2->contains(it1->mid(i, i+NGRAM_SIZE), Qt::CaseInsensitive)){
+                    tempSum++;
+                }
+            }
+            //tempSum/=(it1->size() - NGRAM_SIZE + 1);
+            ngrams+=std::max(it1->size(), it2->size()) - NGRAM_SIZE + 1;
+            sum+=tempSum;
+        }
+    }
+    return sum/ngrams;
+}
+
 
 

@@ -22,6 +22,7 @@ public:
     double normalizedDistance(const QVector<double>&, const QVector<double>&) const;
     double jaccardSimilarity(QSet<QString>, QSet<QString>);
     double smcSimilarity(QSet<QString>, QSet<QString>, QSet<QString>);
+    double ngramSimilarity(QSet<QString>, QSet<QString>);
     void testDistance(QTextStream &);
     void testSimilarity(QTextStream &, QList<QSet<QString> >, QSet<QString>);
 

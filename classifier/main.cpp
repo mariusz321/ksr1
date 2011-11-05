@@ -12,27 +12,27 @@ int main(int argc, char *argv[])
     QCoreApplication a(argc, argv);
 
     QString DIRECTORY_NAME = QString("texts");
-    bool KNN = true;
+    bool KNN = false;
     bool EXTRACTION = false;
-    bool SIMILARITY = false;
+    bool SIMILARITY = true;
 
-       QStringList labelsList = QStringList();
-       labelsList.append("WEST-GERMANY");
-       labelsList.append("USA");
-       labelsList.append("FRANCE");
-       labelsList.append("UK");
-       labelsList.append("CANADA");
-       labelsList.append("JAPAN");
+//       QStringList labelsList = QStringList();
+//       labelsList.append("WEST-GERMANY");
+//       labelsList.append("USA");
+//       labelsList.append("FRANCE");
+//       labelsList.append("UK");
+//       labelsList.append("CANADA");
+//       labelsList.append("JAPAN");
 
-       QString tag = "PLACES";
+//       QString tag = "PLACES";
 
-//    QStringList labelsList;
-//    labelsList.append("COFFEE");
-//    labelsList.append("GOLD");
-//    labelsList.append("SHIP");
-//    labelsList.append("SUGAR");
+    QStringList labelsList;
+    labelsList.append("COFFEE");
+    labelsList.append("GOLD");
+    labelsList.append("SHIP");
+    labelsList.append("SUGAR");
 
-//    QString tag = "TOPICS";
+    QString tag = "TOPICS";
 
     SgmlReader sgmlReader = SgmlReader(labelsList, tag);
     //sgmlReader.findLabels(DIRECTORY_NAME);
@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
             knn.testSimilarity(out, wordSetList, allWordsSet);
 
             //czas obliczen
+            std::cout<<"Czas obliczen: "<<timer.elapsed()<<std::endl;
             out<<endl<<"Czas obliczen: "<<timer.elapsed()<<" ms\n";
 
             file.close();

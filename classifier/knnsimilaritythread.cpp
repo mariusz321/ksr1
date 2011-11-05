@@ -32,8 +32,8 @@ void KnnSimilarityThread::run(){
             std::cout<<i<<std::endl;//////
             out<<"\n\nWektor: "<<i<<"\n";//////
             for(int j=0; j<index1; j++){
-                similarity = knn.jaccardSimilarity(wordSetList.at(i), wordSetList.at(j));
-                //similarity = knn.smcSimilarity(wordSetList.at(i), wordSetList.at(j), allWordsSet);
+                //similarity = knn.jaccardSimilarity(wordSetList.at(i), wordSetList.at(j));
+                similarity = knn.ngramSimilarity(wordSetList.at(i), wordSetList.at(j));
                 QPair<double, int> similarityPair(similarity, j);
                 similarityPairVector[j]=similarityPair;
             }

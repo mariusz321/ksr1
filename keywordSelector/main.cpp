@@ -1,3 +1,4 @@
+#undef __STRICT_ANSI__
 #include "ArticleLoader.h"
 #include "DiscriminatingExtractor.h"
 
@@ -6,6 +7,7 @@
 #include <QElapsedTimer>
 
 #include <QDebug>
+#include <QFile>
 
 int main(int argc, char *argv[])
 {
@@ -34,10 +36,15 @@ int main(int argc, char *argv[])
         qDebug() << "extraction took" << extractMsecs << "msecs";
     }
     delete kwi;
-    QTextStream out(stdout);
-    for (int i = 0; i < kw.size(); i++) {
-        out << kw.at(i).second << " " << kw.at(i).first << endl;
+    QFile file("keyword.txt");
+    if(file.open(QIODevice::WriteOnly)){
+            QTextStream out(&file);
+            for (int i = 0; i < kw.size(); i++) {
+                qDebug() << kw.at(i).first << kw.at(i).second;
+                out<<kw.at(i).first << kw.at(i).second<<endl;
+            }
     }
+
 
     return 0;
 }
