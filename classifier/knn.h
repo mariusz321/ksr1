@@ -25,9 +25,7 @@ public:
     double ngramSimilarity(QSet<QString>, QSet<QString>);
     void testDistance(QTextStream &);
     void testSimilarity(QTextStream &, QList<QSet<QString> >, QSet<QString>);
-
-private:
-
+    void format(QTextStream &out, int k, int success, int failure) const;
 };
 
 #endif // KNN_H
