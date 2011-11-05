@@ -1,6 +1,11 @@
 #include "DiscriminatingExtractor.h"
 
+#include <QElapsedTimer>
+
 #include <QDebug>
+
+// uncomment the define below for timings
+//#define TIMING
 
 QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
@@ -61,11 +66,24 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
     kwreal *sortBuf = new kwreal[allWords.size()];
 #pragma omp parallel for
     for (int i = 0; i < allWords.size(); i++) {
+#ifdef TIMING
+        QElapsedTimer timer;
+        timer.start();
+        int subMsecs;
+        int simMsecs;
+#endif
         QVector<QSet<QString> > subtractedWords = articlesWords;
         for (int j = 0; j < subtractedWords.size(); j++) {
             subtractedWords[j].remove(allWords.values().at(i));
         }
+#ifdef TIMING
+        subMsecs = timer.restart();
+#endif
         sortBuf[i] = getSimiliarity(subtractedWords);
+#ifdef TIMING
+        simMsecs = timer.elapsed();
+        qDebug() << "i:" << i << "subtraction:" << subMsecs << "similiarity:" << simMsecs;
+#endif
     }
     QList<QPair<kwreal, QString> > sortList;
     sortList.reserve(allWords.size());
