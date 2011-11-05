@@ -8,7 +8,7 @@
 
 #include <QString>
 
-MetricInterface *MetricFactory::getNewMetric(int metric)
+MetricInterface *MetricFactory::getNewMetric(MetricFactory::Metric metric)
 {
     switch(metric){
         case EUCLIDEAN:

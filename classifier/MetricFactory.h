@@ -7,8 +7,8 @@ class MetricFactory
 {
     MetricFactory() = delete;
 public:
-    static MetricInterface *getNewMetric (int en);//(const QString &name);
-    enum { EUCLIDEAN, MANHATTAN, CHEBYSHEV, NORMALIZED, NGRAM};
+    enum Metric { EUCLIDEAN, MANHATTAN, CHEBYSHEV, NORMALIZED, NGRAM};
+    static MetricInterface *getNewMetric (Metric metric);//(const QString &name);
 };
 
 #endif // METRICFACTORY_H
