@@ -54,7 +54,7 @@ void Knn::testDistance(QTextStream &out){
     metric->clean(elements);
     delete metric;
 
-    QTextStream cout(stdout);
+    QTextStream console(stdout);
     for(int k=0; k<resultList.at(0)->size(); k++){
         int success = 0;
         int failure = 0;
@@ -63,10 +63,8 @@ void Knn::testDistance(QTextStream &out){
             failure += resultList.at(i)->at(k).second;
         }
 
-        float successProc = 100.0*success/(success+failure);
-        float failureProc = 100-successProc;
-        cout << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
-        out  << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
+        format(out, k + 1, success, failure);
+        format(console, k + 1, success, failure);
     }
 
     for (int i = 0; i < resultList.size(); i++) {
@@ -98,7 +96,7 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
         delete threadsList.at(i);
     }
 
-    QTextStream cout(stdout);
+    QTextStream console(stdout);
     for(int k=0; k<resultList.at(0)->size(); k++){
         int success = 0;
         int failure = 0;
@@ -107,10 +105,8 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
             failure += resultList.at(i)->at(k).second;
         }
 
-        float successProc = 100.0*success/(success+failure);
-        float failureProc = 100-successProc;
-        cout << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
-        out  << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
+        format(out, k + 1, success, failure);
+        format(console, k + 1, success, failure);
     }
 
     for (int i = 0; i < resultList.size(); i++) {
@@ -118,6 +114,13 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
     }
 
     out.flush();
+}
+
+void Knn::format(QTextStream &out, int k, int success, int failure) const
+{
+    float successProc = 100.0 * success / (success + failure);
+    float failureProc = 100 - successProc;
+    out  << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
 }
 
 double Knn::jaccardSimilarity(QSet<QString> set1, QSet<QString> set2){
