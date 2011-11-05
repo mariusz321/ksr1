@@ -24,9 +24,21 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
         }
         articlesWords.append(articleWords);
     }
+
     for (int i = 0; i < articlesWords.size(); i++) {
         allWords.unite(articlesWords.at(i));
     }
+#if 0
+    QStringList listall;
+    listall.reserve(allWords.size());
+    for (int i = 0; i < allWords.size(); i++) {
+        listall << allWords.values().at(i);
+    }
+    qSort(listall);
+    qDebug() << listall;
+    qDebug() << listall.size();
+    return result;
+#endif
     const kwreal g = getSimiliarity(articlesWords);
     qDebug() << "g:" << g;
     kwreal *sortBuf = new kwreal[allWords.size()];
