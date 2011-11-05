@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
     if(file.open(QIODevice::WriteOnly)){
             QTextStream out(&file);
             for (int i = 0; i < kw.size(); i++) {
-                qDebug() << kw.at(i).first << kw.at(i).second;
-                out << kw.at(i).first << " " << kw.at(i).second << endl;
+                //qDebug() << kw.at(i).second << kw.at(i).first;
+                out << kw.at(i).second << " " << kw.at(i).first << endl;
             }
     }
     file.close();
