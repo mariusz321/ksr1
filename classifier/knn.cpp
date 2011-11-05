@@ -1,11 +1,13 @@
 #undef __STRICT_ANSI__
+
 #include "knn.h"
-#include <cmath>
-#include <iostream>
 #include "knnthread.h"
 #include "knnsimilaritythread.h"
 #include "MetricInterface.h"
 #include "MetricFactory.h"
+
+#include <cmath>
+#include <QTextStream>
 
 Knn::Knn()
 {
@@ -52,6 +54,7 @@ void Knn::testDistance(QTextStream &out){
     metric->clean(elements);
     delete metric;
 
+    QTextStream cout(stdout);
     for(int k=0; k<resultList.at(0)->size(); k++){
         int success = 0;
         int failure = 0;
@@ -62,8 +65,8 @@ void Knn::testDistance(QTextStream &out){
 
         float successProc = 100.0*success/(success+failure);
         float failureProc = 100-successProc;
-        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<std::endl;
-        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<"\n";
+        cout << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
+        out  << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
     }
 
     for (int i = 0; i < resultList.size(); i++) {
@@ -95,6 +98,7 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
         delete threadsList.at(i);
     }
 
+    QTextStream cout(stdout);
     for(int k=0; k<resultList.at(0)->size(); k++){
         int success = 0;
         int failure = 0;
@@ -105,8 +109,8 @@ void Knn::testSimilarity(QTextStream &out, QList<QSet<QString> > wordSetList, QS
 
         float successProc = 100.0*success/(success+failure);
         float failureProc = 100-successProc;
-        std::cout<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<std::endl;
-        out<<"\nk = "<<k+1<<" Poprawne = "<<success<<" ("<< successProc<<"%), Bledne = "<<failure<<" ("<<failureProc<<"%)"<<"\n";
+        cout << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
+        out  << "\nk = " << k + 1 << " Poprawne = " << success << " (" << successProc << "%), Bledne = " << failure << " (" << failureProc << "%)" << endl;
     }
 
     for (int i = 0; i < resultList.size(); i++) {
@@ -145,7 +149,7 @@ double Knn::ngramSimilarity(QSet<QString> set1, QSet<QString> set2){
                 }
             }
             //tempSum/=(it1->size() - NGRAM_SIZE + 1);
-            ngrams+=std::max(it1->size(), it2->size()) - NGRAM_SIZE + 1;
+            ngrams+=qMax(it1->size(), it2->size()) - NGRAM_SIZE + 1;
             sum+=tempSum;
         }
     }
