@@ -5,7 +5,9 @@
 
 #include <QtCore/QCoreApplication>
 #include <QTextStream>
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
 #include <QElapsedTimer>
+#endif
 
 #include <QDebug>
 #include <QFile>
@@ -43,19 +45,27 @@ int main(int argc, char *argv[])
 
     // limit the scope of timer
     {
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
         QElapsedTimer loadTimer;
         loadTimer.start();
+#endif
         articles = ArticleLoader::loadFromFile(a.arguments().at(1));
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
         int loadMsecs = loadTimer.elapsed();
         qDebug() << "loading took" << loadMsecs << "msecs";
+#endif
     }
     KeywordExtractorInterface *kwi = new MIExtractor();
     {
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
         QElapsedTimer extractTimer;
         extractTimer.start();
+#endif
         kw = kwi->extractKeywords(articles);
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
         int extractMsecs = extractTimer.elapsed();
         qDebug() << "extraction took" << extractMsecs << "msecs";
+#endif
     }
     delete kwi;
     QFile file(a.arguments().at(2));

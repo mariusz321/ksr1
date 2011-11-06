@@ -1,13 +1,17 @@
 #undef __STRICT_ANSI__
 #include "DiscriminatingExtractor.h"
 
-#include <QElapsedTimer>
 #include <QCoreApplication>
 
 #include <QDebug>
 
 // uncomment the define below for timings
-//#define TIMING
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
+    //#define TIMING
+    #ifdef TIMING
+        #include <QElapsedTimer>
+    #endif
+#endif
 
 QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
@@ -109,13 +113,17 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
 #endif
     }
     QList<QPair<kwreal, QString> > sortList;
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
     sortList.reserve(allWords.size());
+#endif
     for (int i = 0; i < allWords.size(); i++) {
         sortList.append(qMakePair(sortBuf[i] - g, allWords.values().at(i)));
     }
     delete [] sortBuf;
     qSort(sortList);
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
     result.reserve(sortList.size());
+#endif
     foreach (const auto pair, sortList) {
         result.append(qMakePair(pair.second, pair.first));
     }

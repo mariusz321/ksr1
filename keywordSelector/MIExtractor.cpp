@@ -39,6 +39,9 @@ QList<QPair<QString, kwreal> > MIExtractor::extractKeywords(const QList<QPair<QS
     const float N = articles.size();
     for (int i = 0; i < allClassesList.size(); i++) {
         QList<QPair<kwreal, QString> > classKeywordsList;
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
+        classKeywordsList.reserve(allWordsList.size());
+#endif
         for (int j = 0; j < allWordsList.size(); j++) {
             const QString &word = allWordsList.at(j);
             int N11 = 0, N10 = 0, N01 = 0, N00 = 0;
