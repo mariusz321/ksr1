@@ -20,9 +20,11 @@ LIBS += -lgomp
 
 SOURCES += main.cpp \
     ArticleLoader.cpp \
-    DiscriminatingExtractor.cpp
+    DiscriminatingExtractor.cpp \
+    MIExtractor.cpp
 
 HEADERS += \
     ArticleLoader.h \
     KeywordExtractorInterface.h \
-    DiscriminatingExtractor.h
+    DiscriminatingExtractor.h \
+    MIExtractor.h

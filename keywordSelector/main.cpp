@@ -1,6 +1,7 @@
 #undef __STRICT_ANSI__
 #include "ArticleLoader.h"
 #include "DiscriminatingExtractor.h"
+#include "MIExtractor.h"
 
 #include <QtCore/QCoreApplication>
 #include <QTextStream>
@@ -48,7 +49,7 @@ int main(int argc, char *argv[])
         int loadMsecs = loadTimer.elapsed();
         qDebug() << "loading took" << loadMsecs << "msecs";
     }
-    KeywordExtractorInterface *kwi = new DiscriminatingExtractor();
+    KeywordExtractorInterface *kwi = new MIExtractor();
     {
         QElapsedTimer extractTimer;
         extractTimer.start();
