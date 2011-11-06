@@ -7,6 +7,7 @@
 #include "sgmlreader.h"
 #include "tfidf.h"
 #include "MIKeywordLoader.h"
+#include "ArticleLoader.h"
 
 #include <QDebug>
 
@@ -14,7 +15,8 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    QString DIRECTORY_NAME = QString("texts");
+    //QString DIRECTORY_NAME = QString("texts");
+    QString SIMPLE_FILE_NAME("texts/blablabla.dat");
     bool KNN = false;
     bool EXTRACTION = true;
     bool SIMILARITY = false;
@@ -52,7 +54,9 @@ int main(int argc, char *argv[])
     timer.start();
 
     if(SIMILARITY){
-        QList<QPair<QString, QString> > labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
+        QList<QPair<QString, QString> > labelsArticlesPairs;
+        //labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
+        labelsArticlesPairs = ArticleLoader::loadFromFile(SIMPLE_FILE_NAME);
         QMap<QString, int> wordToCountMap = sgmlReader.countWords(labelsArticlesPairs);
         QSet<QString> allWordsSet = sgmlReader.getAllWordsSet(wordToCountMap, 0.0, 0.99);
         QList<QSet<QString> > wordSetList = sgmlReader.getWordSets(labelsArticlesPairs, allWordsSet);
@@ -76,7 +80,9 @@ int main(int argc, char *argv[])
     }
 
     if(EXTRACTION){
-        QList<QPair<QString, QString> > labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
+        QList<QPair<QString, QString> > labelsArticlesPairs;
+        //labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
+        labelsArticlesPairs = ArticleLoader::loadFromFile(SIMPLE_FILE_NAME);
         /*for (int i = 0; i < labelsArticlesPairs.size(); i++) {
             qDebug() << "article:" << labelsArticlesPairs.at(i).second;
         }*/
@@ -111,7 +117,7 @@ int main(int argc, char *argv[])
         Tfidf tfidf;
 
         QList<QList<double> > tfList = tfidf.computeTfList(labelsArticlesPairs, wordsCountList, regexpList);//lista wspolczynnikow tf dla artykulow
-        QVector<double> idfVector = tfidf.computeIDF(sgmlReader.articlesCount, tfidf.wordInArticles);
+        QVector<double> idfVector = tfidf.computeIDF(labelsArticlesPairs.size(), tfidf.wordInArticles);
         QList<QList<double> > tfidfList = tfidf.computeTFIDF(tfList, idfVector);
 
         tfidf.saveToFile(tfidfList, labelsArticlesPairs, "wektory.txt");

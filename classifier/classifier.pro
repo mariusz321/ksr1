@@ -32,7 +32,8 @@ SOURCES += main.cpp \
     NGramLoader.cpp \
     NGramMetric.cpp \
     MIKeywordLoader.cpp \
-    KeywordLoaderInterface.cpp
+    KeywordLoaderInterface.cpp \
+    ArticleLoader.cpp
 
 HEADERS += \
     tfidf.h \
@@ -51,4 +52,5 @@ HEADERS += \
     NGramLoader.h \
     NGramMetric.h \
     KeywordLoaderInterface.h \
-    MIKeywordLoader.h
+    MIKeywordLoader.h \
+    ArticleLoader.h
