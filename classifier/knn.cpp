@@ -125,11 +125,8 @@ double Knn::jaccardSimilarity(QSet<QString> set1, QSet<QString> set2){
     return 1.0*set1.intersect(set2).size()/sumSet.size();
 }
 
-double Knn::smcSimilarity(QSet<QString> set1, QSet<QString> set2, QSet<QString> allWordsSet){
-    QSet<QString> notSet1 = allWordsSet - set1;
-    QSet<QString> notSet2 = allWordsSet - set2;
-
-    return 1.0*(set1.intersect(set2).size()+notSet1.intersect(notSet2).size())/allWordsSet.size();
+double Knn::newSimilarity(QSet<QString> set1, QSet<QString> set2, QSet<QString> ngramSet1, QSet<QString> ngramSet2){
+    return sqrt(jaccardSimilarity(set1, set2)*jaccardSimilarity(ngramSet1, ngramSet2));
 }
 
 double Knn::ngramSimilarity(QSet<QString> set1, QSet<QString> set2){
