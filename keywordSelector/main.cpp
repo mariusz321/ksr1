@@ -75,6 +75,9 @@ int main(int argc, char *argv[])
                 out << "*** " << kw.at(i).first << " ***" << endl;
                 const QVector<QPair<kwreal, QString> > keywords = kw.at(i).second;
                 for (int j = 0; j < keywords.size(); j++) {
+                    if (keywords.at(j).first <= 0) {
+                        continue;
+                    }
                     out << keywords.at(j).first << " " << keywords.at(j).second << endl;
                 }
             }
