@@ -12,7 +12,7 @@ my $label = "";
 while(<MYINPUTFILE>) {
 	$line = $_;
 	chomp($line);
-	if ($line =~ /\*\*\* (\w+) \*\*\*/) {
+	if ($line =~ /\*\*\* (.+) \*\*\*/) {
 		$label = $1;
 		$first = 0;
 		#print "label: $label\n";
