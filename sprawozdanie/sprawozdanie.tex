@@ -112,11 +112,49 @@ Dla ciągów identycznych miary podobieństwa przyjmują wartość 1, a dla zupe
 
 
 \section{Opis implementacji}
-{\color{blue}
-Należy tu zamieścić krótki i zwięzły opis zaprojektowanych klas oraz powiązań
-między nimi. Powinien się tu również znaleźć diagram UML  (diagram klas)
-prezentujący najistotniejsze elementy stworzonej aplikacji. Należy także
-podać, w jakim języku programowania została stworzona aplikacja. }
+Aplikacja została podzielona na cztery główne moduły:
+\begin{itemize}
+ \item \verb|sgmlExtractor| \ppauza prosta aplikacja służąca do ekstrakcji danych z plików formatu \verb|SGML| na prostszy w obsłudze format,
+ \item \verb|keywordSelector| \ppauza aplikacja służąca do wyboru słów kluczowych dla zadanego tekstu,
+ \item \verb|stemmer| \ppauza aplikacja dokonująca rdzeniownie tekstu,
+ \item \verb|classifier| \ppauza główna aplikacja zadania, która dokonuje klasyfikacji danych wejściowych.
+\end{itemize}
+Z wyjątkiem aplikacji \verb|stemmer|, wszystkie opisane powyżej aplikacje wykonane zotały przy użyciu frameworka \verb|Qt|, w języku \verb|C++|.
+
+\subsection{sgmlExtractor}
+Aplikacja ta ekstrahuje dane z pliku o strukturze \verb|SGML| do pliku o następującym formacie:
+\begin{verbatim}
+ etykieta1
+ tekst1
+ etykieta2
+ tekst2
+\end{verbatim}
+Pozwala to na szybkie wczytanie danych, a także na ich łatwą interpretację przez człowieka \ppauza dane można edytować bez większych obaw o ,,zepsucie'' formatu pliku.
+
+Aplikacja ta zawiera klasę \verb|SgmlReader|, która w metodzie \verb|readDirectory| przeszukuje żądany katalog w poszukiwaniu plików w formacie \verb|SGML|, a jeśli takie występują, to sprawdza zawarte w nich informacje pod kątem ustawionych wcześniej cech.
+
+Zapis do nowego formatu wykonuje klasa \verb|ArticleWriter|.
+
+\subsection{keywordSelector}
+Aplikacja implementuje dwie metody wyboru słów kluczowych: \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.} oraz \textit{mutual information}\footnote{Ze względu na nieznajomość polskiego tłumaczenia tej nazwy, będziemy używać jej oryginalnego określenia. Gdybyśmy mieli nazwę tę przetłumaczyć, brzmiałaby ona następująco: ,,metoda informacji wspólnej''.}, implementowane odpowiednio przez klasy   \verb|DiscriminatingExtractor| oraz \verb|MIExtractor|.
+
+Obie metody odziedziczają interfejs \verb|KeywordExtractorInterface|, dzięki czemu możliwy jest dogodny wybór sposobu ekstrakcji słów kluczowych.
+
+\subsection{stemmer}
+{\color{red} OPPISAĆ STEMMER w kilku slowach}
+
+\subsection{classifier}
+Aplikacja ta może działać w trzech trybach: klasyfikowania za pomocą metody $k$-NN, badania podobieństwa tekstów oraz ekstrakcji cech.
+
+\subsubsection{Metoda $k$-NN}
+\label{sec:impl_knn}
+W trybie tym, zaraz po utworzeniu strumienia wyjściowego, sterowanie przekazywane jest do klasy \verb|Knn|, która inicjuje wybraną metrykę korzystając z fabryki \verb|MetricFactory|, a następnie za jej pomocą ładuje dane (które mogą być specyficzne dla żądanej metryki), po czym tworzy wątki \verb|KnnThread|, które dokonują obliczeń i wyznaczają odległości pomiędzy poszczególnymi obiektami zbiorów testowego i treningowego. Klasa \verb|Knn| konsoliduje wyniki i zapisuje je.
+
+\subsubsection{Badanie podobieństwa tekstów}
+Po wczytaniu artykułów za pomocą klasy \verb|ArticleLoader| następuje wyznaczenie wymaganych zbiorów słów, po czym podobnie jak w sekcji \ref{sec:impl_knn} sterowanie przekazywane jest do klasy \verb|Knn| z tą różnicą, że praca w tym przypadku wykonywana jest przez wątki klasy \verb|KnnSimiliarityThread|.
+
+\subsubsection{Ekstrakcja cech}
+Po wczytaniu artykułów za pomocą klasy \verb|ArticleLoader| wybierane są słowa, względem których liczone mają być wagi. Po zainicjowaniu wszystkich potrzebnych danych klasa \verb|Tfidf| wykonuje algorytm o tej samej nazwie.
 
 \section{Materiały i metody}
 Badania zostały przeprowadzone na dwóch zbiorach dokumentów tekstowych:\\
