@@ -13,9 +13,9 @@
     #endif
 #endif
 
-QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
+QList<QPair<QString, QList<QPair<kwreal, QString> > > > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
-    QList<QPair<QString, kwreal> > result;
+    QList<QPair<QString, QList<QPair<kwreal, QString> > > > result;
     QVector<QSet<QString> > articlesWords;
     QVector<QSet<int> > articlesWordsInt;
     QSet<QString> allWords;
@@ -121,12 +121,7 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
     }
     delete [] sortBuf;
     qSort(sortList);
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-    result.reserve(sortList.size());
-#endif
-    foreach (const auto pair, sortList) {
-        result.append(qMakePair(pair.second, pair.first));
-    }
+    result.append(qMakePair(QString("GLOBAL"), sortList));
     return result;
 }
 

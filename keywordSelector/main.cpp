@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     }
     
     QList<QPair<QString, QString> > articles;
-    QList<QPair<QString, kwreal> > kw;
+    QList<QPair<QString, QList<QPair<kwreal, QString> > > > kw;
 
     // limit the scope of timer
     {
@@ -72,8 +72,11 @@ int main(int argc, char *argv[])
     if(file.open(QIODevice::WriteOnly)){
             QTextStream out(&file);
             for (int i = 0; i < kw.size(); i++) {
-                //qDebug() << kw.at(i).second << kw.at(i).first;
-                out << kw.at(i).second << " " << kw.at(i).first << endl;
+                out << "*** " << kw.at(i).first << " ***" << endl;
+                const QList<QPair<kwreal, QString> > keywords = kw.at(i).second;
+                for (int j = 0; j < keywords.size(); j++) {
+                    out << keywords.at(j).first << " " << keywords.at(j).second << endl;
+                }
             }
     }
     file.close();

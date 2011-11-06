@@ -7,7 +7,7 @@
 
 #include <QDebug>
 
-QList<QPair<QString, kwreal> > MIExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
+QList<QPair<QString, QList<QPair<kwreal, QString> > > > MIExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
     QSet<QString> allWords;
     QSet<QString> allClasses;
@@ -34,6 +34,10 @@ QList<QPair<QString, kwreal> > MIExtractor::extractKeywords(const QList<QPair<QS
         allWords.unite(articlesWords.at(i));
     }
 
+    QList<QPair<QString, QList<QPair<kwreal, QString> > > > result;
+#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
+    result.reserve(allClasses.size());
+#endif
     const QStringList &allWordsList = allWords.values();
     const QStringList &allClassesList = allClasses.values();
     const float N = articles.size();
@@ -76,13 +80,13 @@ QList<QPair<QString, kwreal> > MIExtractor::extractKeywords(const QList<QPair<QS
             classKeywordsList.append(qMakePair(sum, word));
         }
         qSort(classKeywordsList);
-        const int count = 10;
+        result.append(qMakePair(allClassesList.at(i), classKeywordsList));
+        /*const int count = 10;
         qDebug() << "class" << allClassesList.at(i);
         for (int j = classKeywordsList.size() - 1; j >= classKeywordsList.size() - count; j--) {
             qDebug() << classKeywordsList.at(j).first << classKeywordsList.at(j).second;
-        }
+        }*/
     }
 
-    QList<QPair<QString, kwreal> > result;
     return result;
 }
