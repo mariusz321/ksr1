@@ -8,13 +8,23 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     
-    QStringList labelsList;
-    labelsList.append("COFFEE");
-    labelsList.append("GOLD");
-    labelsList.append("SHIP");
-    labelsList.append("SUGAR");
+    QStringList labelsList = QStringList();
+    labelsList.append("WEST-GERMANY");
+    labelsList.append("USA");
+    labelsList.append("FRANCE");
+    labelsList.append("UK");
+    labelsList.append("CANADA");
+    labelsList.append("JAPAN");
 
-    QString tag = "TOPICS";
+    QString tag = "PLACES";
+
+//    QStringList labelsList;
+//    labelsList.append("COFFEE");
+//    labelsList.append("GOLD");
+//    labelsList.append("SHIP");
+//    labelsList.append("SUGAR");
+
+//    QString tag = "TOPICS";
     QString dirName = QString("texts");
 
     SgmlReader sgmlReader = SgmlReader(labelsList, tag);

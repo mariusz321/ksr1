@@ -16,15 +16,15 @@ int main(int argc, char *argv[])
     bool EXTRACTION = false;
     bool SIMILARITY = true;
 
-//       QStringList labelsList = QStringList();
-//       labelsList.append("WEST-GERMANY");
-//       labelsList.append("USA");
-//       labelsList.append("FRANCE");
-//       labelsList.append("UK");
-//       labelsList.append("CANADA");
-//       labelsList.append("JAPAN");
+       /*QStringList labelsList = QStringList();
+       labelsList.append("WEST-GERMANY");
+       labelsList.append("USA");
+       labelsList.append("FRANCE");
+       labelsList.append("UK");
+       labelsList.append("CANADA");
+       labelsList.append("JAPAN");
 
-//       QString tag = "PLACES";
+       QString tag = "PLACES"*/;
 
     QStringList labelsList;
     labelsList.append("COFFEE");
