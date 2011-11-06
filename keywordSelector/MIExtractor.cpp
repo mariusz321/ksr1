@@ -7,7 +7,7 @@
 
 #include <QDebug>
 
-QList<QPair<QString, QList<QPair<kwreal, QString> > > > MIExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
+QVector<QPair<QString, QVector<QPair<kwreal, QString> > > > MIExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
     QSet<QString> allWords;
     QSet<QString> allClasses;
@@ -34,7 +34,7 @@ QList<QPair<QString, QList<QPair<kwreal, QString> > > > MIExtractor::extractKeyw
         allWords.unite(articlesWords.at(i));
     }
 
-    QVector<QPair<QString, QList<QPair<kwreal, QString> > > > result(allClasses.size());
+    QVector<QPair<QString, QVector<QPair<kwreal, QString> > > > result(allClasses.size());
     const QVector<QString> allWordsVector = allWords.values().toVector();
     const QVector<QString> allClassesVector = allClasses.values().toVector();
     const float N = articles.size();
@@ -78,8 +78,8 @@ QList<QPair<QString, QList<QPair<kwreal, QString> > > > MIExtractor::extractKeyw
             keywordsPtr[j] = qMakePair(sum, word);
         }
         qSort(classKeywordsVector);
-        result[i] = (qMakePair(classesConstPtr[i], classKeywordsVector.toList()));
+        result[i] = (qMakePair(classesConstPtr[i], classKeywordsVector));
     }
 
-    return result.toList();
+    return result;
 }

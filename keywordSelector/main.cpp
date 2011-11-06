@@ -41,7 +41,7 @@ int main(int argc, char *argv[])
     }
     
     QList<QPair<QString, QString> > articles;
-    QList<QPair<QString, QList<QPair<kwreal, QString> > > > kw;
+    QVector<QPair<QString, QVector<QPair<kwreal, QString> > > > kw;
 
     // limit the scope of timer
     {
@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
             QTextStream out(&file);
             for (int i = 0; i < kw.size(); i++) {
                 out << "*** " << kw.at(i).first << " ***" << endl;
-                const QList<QPair<kwreal, QString> > keywords = kw.at(i).second;
+                const QVector<QPair<kwreal, QString> > keywords = kw.at(i).second;
                 for (int j = 0; j < keywords.size(); j++) {
                     out << keywords.at(j).first << " " << keywords.at(j).second << endl;
                 }

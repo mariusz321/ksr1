@@ -13,9 +13,9 @@
     #endif
 #endif
 
-QList<QPair<QString, QList<QPair<kwreal, QString> > > > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
+QVector<QPair<QString, QVector<QPair<kwreal, QString> > > > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
-    QList<QPair<QString, QList<QPair<kwreal, QString> > > > result;
+    QVector<QPair<QString, QVector<QPair<kwreal, QString> > > > result;
     QVector<QSet<QString> > articlesWords;
     QVector<QSet<int> > articlesWordsInt;
     QSet<QString> allWords;
@@ -112,16 +112,14 @@ QList<QPair<QString, QList<QPair<kwreal, QString> > > > DiscriminatingExtractor:
         qDebug() << "i:" << i << "subtraction:" << subMsecs << "similiarity:" << simMsecs;
 #endif
     }
-    QList<QPair<kwreal, QString> > sortList;
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-    sortList.reserve(allWords.size());
-#endif
+    QVector<QPair<kwreal, QString> > sortVector;
+    sortVector.reserve(allWords.size());
     for (int i = 0; i < allWords.size(); i++) {
-        sortList.append(qMakePair(sortBuf[i] - g, allWords.values().at(i)));
+        sortVector.append(qMakePair(sortBuf[i] - g, allWords.values().at(i)));
     }
     delete [] sortBuf;
-    qSort(sortList);
-    result.append(qMakePair(QString("GLOBAL"), sortList));
+    qSort(sortVector);
+    result.append(qMakePair(QString("GLOBAL"), sortVector));
     return result;
 }
 
