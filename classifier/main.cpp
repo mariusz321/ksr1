@@ -6,6 +6,9 @@
 #include "knnsimilaritythread.h"
 #include "sgmlreader.h"
 #include "tfidf.h"
+#include "MIKeywordLoader.h"
+
+#include <QDebug>
 
 int main(int argc, char *argv[])
 {
@@ -13,18 +16,19 @@ int main(int argc, char *argv[])
 
     QString DIRECTORY_NAME = QString("texts");
     bool KNN = false;
-    bool EXTRACTION = false;
-    bool SIMILARITY = true;
+    bool EXTRACTION = true;
+    bool SIMILARITY = false;
+    bool KEYWORDS = true;
 
-       /*QStringList labelsList = QStringList();
-       labelsList.append("WEST-GERMANY");
-       labelsList.append("USA");
-       labelsList.append("FRANCE");
-       labelsList.append("UK");
-       labelsList.append("CANADA");
-       labelsList.append("JAPAN");
+    /*QStringList labelsList;
+    labelsList.append("WEST-GERMANY");
+    labelsList.append("USA");
+    labelsList.append("FRANCE");
+    labelsList.append("UK");
+    labelsList.append("CANADA");
+    labelsList.append("JAPAN");
 
-       QString tag = "PLACES"*/;
+    QString tag = "PLACES";*/
 
     QStringList labelsList;
     labelsList.append("COFFEE");
@@ -73,7 +77,33 @@ int main(int argc, char *argv[])
 
     if(EXTRACTION){
         QList<QPair<QString, QString> > labelsArticlesPairs = sgmlReader.readDirectory(DIRECTORY_NAME);
-        QMap<QString, int> wordToCountMap = sgmlReader.countWords(labelsArticlesPairs);
+        /*for (int i = 0; i < labelsArticlesPairs.size(); i++) {
+            qDebug() << "article:" << labelsArticlesPairs.at(i).second;
+        }*/
+        QMap<QString, int> wordToCountMap;
+        if (KEYWORDS) {
+            KeywordLoaderInterface *kli = new MIKeywordLoader();
+            QList<QPair<QString, QStringList> > keywords = kli->loadFromFile("keywords.txt");
+            QSet<QString> keywordsSet;
+            for (int i = 0; i < keywords.size(); i++) {
+                for (int j = 0; j < keywords.at(i).second.size(); j++) {
+                    keywordsSet.insert(keywords.at(i).second.at(j));
+                }
+            }
+            for (int i = 0; i < keywordsSet.size(); i++) {
+                const QString word = keywordsSet.values().at(i);
+                QRegExp re(QString("\\b(%1)\\b").arg(word), Qt::CaseInsensitive);
+                //qDebug() << "trying" << re.pattern();
+                for (int j = 0; j < labelsArticlesPairs.size(); j++) {
+                    if (re.indexIn(labelsArticlesPairs.at(j).second)) {
+                        //qDebug() << "found";
+                        wordToCountMap[word] += re.capturedTexts().size();
+                    }
+                }
+            }
+        } else {
+            wordToCountMap = sgmlReader.countWords(labelsArticlesPairs);
+        }
         QList<QPair<int, QString> > wordsCountList = sgmlReader.getWordsCountList(wordToCountMap, 0.9, 0.099);
         QList<QRegExp> regexpList = sgmlReader.getQRegExpList(wordsCountList);
 
