@@ -30,7 +30,9 @@ SOURCES += main.cpp \
     NormalizedMetric.cpp \
     VectorLoader.cpp \
     NGramLoader.cpp \
-    NGramMetric.cpp
+    NGramMetric.cpp \
+    MIKeywordLoader.cpp \
+    KeywordLoaderInterface.cpp
 
 HEADERS += \
     tfidf.h \
@@ -47,8 +49,6 @@ HEADERS += \
     VectorLoader.h \
     Element.h \
     NGramLoader.h \
-    NGramMetric.h
-
-
-
-
+    NGramMetric.h \
+    KeywordLoaderInterface.h \
+    MIKeywordLoader.h
