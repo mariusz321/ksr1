@@ -2,24 +2,29 @@
 #include "DiscriminatingExtractor.h"
 
 #include <QElapsedTimer>
+#include <QtCore/QCoreApplication>
+#include <omp.h>
 
 #include <QDebug>
 
 // uncomment the define below for timings
-//#define TIMING
+#define TIMING
 
 QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QList<QPair<QString, QString> > &articles) const
 {
     QList<QPair<QString, kwreal> > result;
     QVector<QSet<QString> > articlesWords;
     QSet<QString> allWords;
-    articlesWords.reserve(articles.size());
-    QRegExp wordExtractor("\\b(\\w+)\\b", Qt::CaseInsensitive);
-    QRegExp numbers("[0-9]");
+    articlesWords.resize(articles.size());
+    const QVector<QPair<QString, QString> > articlesVector = articles.toVector();
+    const QPair<QString, QString> *constArticles = articlesVector.constData();
+#pragma omp parallel for
     for (int i = 0; i < articles.size(); i++) {
+        QRegExp wordExtractor("\\b(\\w+)\\b", Qt::CaseInsensitive);
+        QRegExp numbers("[0-9]");
         int pos = 0;
         QSet<QString> articleWords;
-        const QString &str = articles.at(i).second;
+        const QString &str = constArticles[i].second;
         while ((pos = wordExtractor.indexIn(str, pos)) != -1) {
             QString word = wordExtractor.cap();
             word.remove(numbers);
@@ -28,12 +33,36 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
             }
             pos += wordExtractor.matchedLength();
         }
-        articlesWords.append(articleWords);
+#pragma omp critical(mysection)
+        {
+            articlesWords[i] = articleWords;
+        }
     }
 
-    for (int i = 0; i < articlesWords.size(); i++) {
-        allWords.unite(articlesWords.at(i));
+    int threads;
+    QSet<QString> *wordSets = nullptr;
+#pragma omp parallel
+    {
+#pragma omp single
+        {
+            threads = omp_get_num_threads();
+            wordSets = new QSet<QString>[threads];
+        }
+#pragma omp for
+        for (int i = omp_get_thread_num(); i < articlesWords.size(); i += threads) {
+            wordSets[omp_get_thread_num()].unite(articlesWords.at(i));
+        }
+#pragma omp single
+        {
+            for (int i = 0; i < threads; i++) {
+                allWords.unite(wordSets[i]);
+            }
+            delete wordSets;
+        }
     }
+    /*for (int i = 0; i < articlesWords.size(); i++) {
+        allWords.unite(articlesWords.at(i));
+    }*/
     QHash<QString, int> decimator;
     decimator.reserve(allWords.size());
     for (int i = 0; i < articlesWords.size(); i++) {
@@ -51,7 +80,7 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
             allWords.remove(key);
         }
     }
-#if 0
+#if 1
     QStringList listall;
     listall.reserve(allWords.size());
     for (int i = 0; i < allWords.size(); i++) {
@@ -60,13 +89,24 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
     qSort(listall);
     qDebug() << listall;
     qDebug() << listall.size();
-    return result;
+    //return result;
 #endif
-    const kwreal g = getSimiliarity(articlesWords);
+    const QStringList args(QCoreApplication::instance()->arguments());
+    kwreal argg = 0;
+    if (args.size() >= 6) {
+        argg = args.at(5).toDouble();
+    }
+    const kwreal g = (argg == 0) ? getSimiliarity(articlesWords) : argg;
     qDebug() << "g:" << g;
     kwreal *sortBuf = new kwreal[allWords.size()];
+    int start = 0;
+    int end = allWords.size();
+    if (args.size() >= 5) {
+        start = args.at(3).toInt();
+        end = args.at(4).toInt();
+    }
 #pragma omp parallel for
-    for (int i = 0; i < allWords.size(); i++) {
+    for (int i = start; i < end; i++) {
 #ifdef TIMING
         QElapsedTimer timer;
         timer.start();
