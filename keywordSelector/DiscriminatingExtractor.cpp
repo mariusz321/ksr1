@@ -13,8 +13,10 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
 {
     QList<QPair<QString, kwreal> > result;
     QVector<QSet<QString> > articlesWords;
+    QVector<QSet<int> > articlesWordsInt;
     QSet<QString> allWords;
     articlesWords.reserve(articles.size());
+    articlesWordsInt.reserve(articles.size());
     QRegExp wordExtractor("\\b(\\w+)\\b", Qt::CaseInsensitive);
     QRegExp numbers("[0-9]");
     for (int i = 0; i < articles.size(); i++) {
@@ -52,7 +54,16 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
             allWords.remove(key);
         }
     }
-#if 0
+    QList<QString> wordToIntMapList = allWords.toList();
+    for (int i = 0; i < articlesWords.size(); i++) {
+        QSet<int> articleWordsInt;
+        articleWordsInt.reserve(articlesWords.at(i).size());
+        for (int j = 0; j < articlesWords.at(i).size(); j++) {
+            articleWordsInt.insert(wordToIntMapList.indexOf(articlesWords.at(i).values().at(j)));
+        }
+        articlesWordsInt.append(articleWordsInt);
+    }
+#if 1
     QStringList listall;
     listall.reserve(allWords.size());
     for (int i = 0; i < allWords.size(); i++) {
@@ -84,9 +95,9 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
         int subMsecs;
         int simMsecs;
 #endif
-        QVector<QSet<QString> > subtractedWords = articlesWords;
+        QVector<QSet<int> > subtractedWords = articlesWordsInt;
         for (int j = 0; j < subtractedWords.size(); j++) {
-            subtractedWords[j].remove(allWords.values().at(i));
+            subtractedWords[j].remove(i);
         }
 #ifdef TIMING
         subMsecs = timer.restart();
@@ -120,6 +131,23 @@ kwreal DiscriminatingExtractor::getSimiliarity(const QVector<QSet<QString> > &ar
             QSet<QString> intersected = articlesWords.at(i);
             intersected.intersect(articlesWords.at(j));
             QSet<QString> united = articlesWords.at(i);
+            united.unite(articlesWords.at(j));
+            sum += kwreal(intersected.size()) / kwreal(united.size());
+        }
+    }
+    sum *= 2;
+    return sum;
+}
+
+kwreal DiscriminatingExtractor::getSimiliarity(const QVector<QSet<int> > &articlesWords) const
+{
+    const int size = articlesWords.size();
+    kwreal sum = 0;
+    for (int i = 0; i < size; i++) {
+        for (int j = i + 1; j < size; j++) {
+            QSet<int> intersected = articlesWords.at(i);
+            intersected.intersect(articlesWords.at(j));
+            QSet<int> united = articlesWords.at(i);
             united.unite(articlesWords.at(j));
             sum += kwreal(intersected.size()) / kwreal(united.size());
         }
