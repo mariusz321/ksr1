@@ -34,6 +34,12 @@ int main(int argc, char *argv[])
 
     QString tag = "TOPICS";
 
+//    QStringList labelsList;
+//    labelsList.append("CAKE");
+//    labelsList.append("PASTA");
+
+//    QString tag = "DISH";
+
     SgmlReader sgmlReader = SgmlReader(labelsList, tag);
     //sgmlReader.findLabels(DIRECTORY_NAME);
 

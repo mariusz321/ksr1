@@ -16,6 +16,10 @@ KnnSimilarityThread::KnnSimilarityThread(QList<QSet<QString> > wordSetList, QSet
 }
 
 void KnnSimilarityThread::run(){
+
+    enum{JACCARD, NGRAM, NEW};
+    const int type= NEW;
+
     QVector<QPair<double, int> > similarityPairVector(index1); //first - podobienstwo, second - indeks wektora wzgledem ktorego byla mierzona odleglosc
 
     for(int k=1; k<=100; k++){
@@ -28,12 +32,57 @@ void KnnSimilarityThread::run(){
     if(file.open(QIODevice::WriteOnly)){
         QTextStream out(&file);
 
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////
+        QList<QSet<QString> > ngramSetList = QList<QSet<QString> >();
+        if(type==NEW){
+
+#define SIZE 4
+
+            for(int i=0; i<index1; i++){
+                QSet<QString> newSet = QSet<QString>();
+                foreach(QString string, wordSetList.at(i)){
+                    if (string.size()<=SIZE){
+                        newSet.insert(string);
+                    }
+                    else{
+                        for (int k=0; k<string.size()-SIZE+1; k++){
+                            newSet.insert(string.midRef(k, SIZE).toString());
+                        }
+                    }
+                }
+                ngramSetList.append(newSet);
+            }
+        }
+        //////////////////////////////////////////////////////////////////////////////////////////////////////
+
         for(int i=index2; i<wordSetList.size(); i+=numThreads){ //zbiory niesklasyfikowane
             std::cout<<i<<std::endl;//////
             out<<"\n\nWektor: "<<i<<"\n";//////
             for(int j=0; j<index1; j++){
-                //similarity = knn.jaccardSimilarity(wordSetList.at(i), wordSetList.at(j));
+                if(type==JACCARD){
+                    similarity = knn.jaccardSimilarity(wordSetList.at(i), wordSetList.at(j));
+                }
+                if(type==NGRAM){
                 similarity = knn.ngramSimilarity(wordSetList.at(i), wordSetList.at(j));
+                }
+                ////////////////////////////////////////////////////////////////////////////
+                if(type==NEW){
+                    QSet<QString> newSet = QSet<QString>();
+                    foreach(QString string, wordSetList.at(i)){
+                        if (string.size()<=SIZE){
+                            newSet.insert(string);
+                        }
+                        else{
+                            for (int k=0; k<string.size()-SIZE+1; k++){
+                                newSet.insert(string.midRef(k, SIZE).toString());
+                            }
+                        }
+                    }
+
+                ////////////////////////////////////////////////////////////////////////////
+
+                similarity = knn.newSimilarity(wordSetList.at(i), wordSetList.at(j), newSet, ngramSetList.at(j));
+                }
                 QPair<double, int> similarityPair(similarity, j);
                 similarityPairVector[j]=similarityPair;
             }
