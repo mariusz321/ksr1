@@ -1,0 +1,278 @@
+\documentclass{classrep}
+\usepackage[utf8]{inputenc}
+\usepackage{color}
+\usepackage{ltablex}
+\usepackage{makebox}
+
+\studycycle{Informatyka, studia dzienne, II st.}
+\coursesemester{II}
+
+\coursename{Komputerowe systemy rozpoznawania}
+\courseyear{2011/2012}
+
+\courseteacher{dr inż. Arkadiusz Tomczyk}
+\coursegroup{poniedziałek, 10:15}
+
+\author{
+  \studentinfo{Michał Janiszewski}{nr albumu 1} \and
+  \studentinfo{Mariusz Łucka}{169493}
+}
+
+\title{Zadanie Numer 1: Ekstrakcja cech, miary podobieństwa, klasyfikacja}
+\svnurl{}
+
+\begin{document}
+\maketitle
+
+\section{Cel}
+Celem zadania było stworzenie szkieletu aplikacji do klasyfikacji metodą k-NN na tyle uniwersalnego, żeby był niezależny od typu obiektów, które podlegają klasyfikacji.
+
+Następnie dla zadanego zestawu danych tekstowych oraz zebranych przez siebie 100 krótkich tekstów należało zaimplementować dowolne dwie istniejące w literaturze metody ekstrakcji cech i dwie miary podobieństwa tekstów oraz metryki: euklidesowa, uliczna, Czebyszewa.
+
+Kolejny krok to porównanie wyników dla poszczególnych metod oraz opcjonalnie zaproponowanie własnej metody ekstrakcji oraz miary podobieństwa, poprawiającej uzyskiwane wyniki. 
+
+\section{Wprowadzenie}
+\subsection{Algorytm k-nn}
+Algorytm k najbliższych sąsiadów (lub algorytm k-nn z ang. \textit{k nearest neighbours}) jest jednym z algorytmów używanych do klasyfikacji danych. 
+
+Algorytm zakłada istnienie zbioru uczącego zawierającego obserwacje, z których każda ma przypisany wektor zmiennych objaśniających $X$ oraz zmienną objaśnianą $Y$ (etykietę). Wtedy dla pewnej obserwacji $C$ z przypisanym wektorem zmiennych objaśniających $X$ możemy prognozować wartość zmiennej objaśnianej $Y$, czyli możemy dokonać klasyfikacji.
+
+\paragraph{}
+Algorytm polega na:
+
+\begin{enumerate}
+\item porównaniu wartości zmiennych objaśniających dla obserwacji $C$ z wartościami tych zmiennych dla każdej obserwacji w zbiorze uczącym (wg pewnej ustalonej metryki),
+\item wyborze $k$ (ustalona z góry liczba) najbliższych do $C$ obserwacji ze zbioru uczącego,
+\item wyborze etykiety $Y$, która występuje najczęściej wśród znalezionych $k$ obserwacji jako etykiety dla obserwacji $C$. 
+\end{enumerate}
+
+\subsection{Ekstrakcja cech tekstu}
+Celem ekstrakcji cech tekstu jest reprezentacja tekstu w postaci wektorów cech, które następnie można porównać ze sobą. W przypadku tekstu za jego cechy można przyjąć występujące w nim słowa. Badanie wszystkich słów występujących w zbiorze dokumentów byłoby zbyt kosztowne, dlatego należy wybrać cześć z nich (słowa kluczowe), najlepiej charakteryzujących poszczególne dokumenty. Następnie dla każdego dokumentu należy utworzyć wektor wag liczbowych poszczególnych słów kluczowych.
+
+\paragraph{}
+Jedna z metod ograniczenia zbioru rozważanych słów polega na zliczeniu ilość wystąpień poszczególnych słów w całym zbiorze dokumentów oraz odrzuceniu tych które występują najczęściej i najrzadziej (odpowiednie progi należy dobrać doświadczalnie). W ten sposób usuwamy słowa niezwiązane z konkretną klasą dokumentów - słowa występujące tylko w pojedynczych dokumentach lub występujące w prawie każdym dokumencie jak na przykład spójniki, zaimki itd.
+
+{\color{red} OPISAĆ DRUGĄ METODĘ!!!!!!!!!!!}
+  
+Do wyznaczenia wag poszczególnych słów kluczowych w tesktach można wykorzystać algorytm 
+\textbf{TF-IDF}.
+
+\paragraph{}
+Wartość TF-IDF oblicza się ze wzoru:
+
+$$ tf\mbox{-}idf)_{i,j} = tf_{i,j} \times  idf_{i}$$
+
+Gdzie $tf_{i, j}$ to tzw. "term frequency", wyrażana wzorem:
+
+$$ tf_{i,j} = \frac{n_{i,j}}{\sum_k n_{k,j}}$$
+
+Gdzie $n_{i,j}$ jest liczbą wystąpień słowa $t_{i}$ w dokumencie $d_{j}$, a mianownik jest sumą liczby wystąpień wszystkich termów w dokumencie $d_{j}$.
+
+
+$idf_{i}$ to "inverse document frequency", wyrażana wzorem:
+
+$$idf_{i} =  \log \frac{|D|}{|\{d: t_{i} \in d\}}$$
+
+Gdzie:
+$|D|$ - liczba dokumentów w zbiorze\\
+$|\{d : t_{i} \in d\}|$ - liczba dokumentów zawierających przynajmniej jedno wystąpienie danego słowa.
+
+\paragraph{}
+Wartość TF-IDF jest największa dla najlepszych słów kluczowych, czyli takich, które najlepiej pozwalają określić klasy dokumentów. Takie słowo występuje często w danym dokumencie, a jednocześnie pojawia się niewiele razy w innych dokumentach.
+
+
+\subsection{Metryki odległości wektorów liczbowych}
+W tym zadaniu należało zastosować następujące metryki wektorów liczbowych, reprezentujących wydobyte cechy tekstu:
+
+\begin{enumerate}
+\item Metryka euklidesowa $$d(x,y)=\sqrt{\sum_{i=1}^{n}{(x_i-y_i)^2} } $$
+\item Metryka uliczna (Manhattan) $$d(x,y)=\sum_{i=1}^{n}{|x_i-y_i|} $$
+\item Metryka Czebyszewa $$d(x,y)=\max_{i=1:n}(|x_i-y_i|) $$
+\end{enumerate}
+Metryki te są miarami odległości wektorów $x$ i $y$,. zatem im mniejsze wartości otrzymamy tym wektory leżą bliżej siebie.
+
+\subsection{Miary podobieństwa tekstów}
+W zadania zostały wykorzystane następujące dwie miary podobieństwa tekstów:
+
+\begin{enumerate}
+\item Miara Jaccarda: $$J(A,B)=\frac{\mu(A \cap B)}{\mu(A \cup B)}$$
+gdzie $A$ i $B$ to zbiory słów w dwóch dokumentach a $\mu$ oznacza liczność zbioru.
+
+\item Metoda n-gramów.\\
+Określa podobieństwo łańcuchów tekstowych $s_1$ i $s_2$ w oparciu o ilość wspólnych podciągów n-elementowych:
+$$sim_n(s_1, s_2)=\frac{1}{N-n+1}\sum_{i=1}^{N-n+1}h(i)$$
+gdzie:\\
+ $s_1$ i $s_2$ - badane łańcuchy tekstowe,\\
+ $N$ - ilość podciągów n-elementowych w $s_1$,\\
+ $n$ - długość podciągu,\\
+ $h(i)=1$ - jeżeli i-ty podciąg z $s_1$ występuje w $s_2$,\\
+ $h(i)=0$ - jeżeli i-ty podciąg z $s_1$ nie występuje w $s_2$.
+\end{enumerate}
+Dla ciągów identycznych miary podobieństwa przyjmują wartość 1, a dla zupełnie różnych wartość 0.
+
+
+\section{Opis implementacji}
+{\color{blue}
+Należy tu zamieścić krótki i zwięzły opis zaprojektowanych klas oraz powiązań
+między nimi. Powinien się tu również znaleźć diagram UML  (diagram klas)
+prezentujący najistotniejsze elementy stworzonej aplikacji. Należy także
+podać, w jakim języku programowania została stworzona aplikacja. }
+
+\section{Materiały i metody}
+Badania zostały przeprowadzone na dwóch zbiorach dokumentów tekstowych:\\
+\begin{enumerate}
+\item Zbiór dokumentów Reuters dostępny pod adresem:\\ http://archive.ics.uci.edu/ml/datasets/Reuters-21578+Text+Categorization+Collection\\\\
+Dla tego zbioru testy były przeprowadzone w dwóch kategoriach:
+
+\begin{itemize}
+\item \textit{places} (etykiety: \textit{west-germany}, \textit{usa}, \textit{uk}, \textit{france}, \textit{canda}, \textit{japan}),
+\item \textit{topics} (etykiety: \textit{coffee}, \textit{gold}, \textit{ship}, \textit{sugar}).\\
+\end{itemize}
+Wykorzystane zostały tylko artykuły, które w danej kategorii posiadają dokładnie jedną z wymienionych etykiet.\\
+
+
+\item Zbiór wybranych na potrzeby tego zadania 100 krótkich opisów potraw ze strony http://allrecipes.com, z etykietami: \textit{cake} i \textit{pasta} (50 opisów dla każdej kategorii).
+
+\end{enumerate}
+
+\paragraph{}
+We wszystkich badaniach zbiór danych został podzielony na 60\% danych uczących i 40\% danych testowych.
+\paragraph{}
+W każdym zbiorze tekstów zostały wyodrębnione wektory cech dla poszczególnych dokumentów metodami opisanymi w rozdziale 2, a następnie dokonano klasyfikacji za pomocą algorytmu k-NN dla $k$ z zakresu 1-100. Do badania odległości wektorów wykorzystano opisane wcześniej metryki: eklidesową, uliczną i Czebyszewa.\\
+Również dla każdego zestawu tekstów policzono wartości podobieństwa ze tekstów zbioru treningowego do tekstów ze zbioru uczącego i dokonano klasyfikacji za pomocą k-NN.
+
+Dodatkowo w celu poprawy otrzymywanych wyników została zastosowana zmodyfikowana przez nas metoda Jaccarda do określania podobieństwa tekstów: $$sim(d_1, d_2) = \sqrt{J(A ,B)*J(C, D)}$$\\
+gdzie:\\
+$A$ i $B$ to zbiory słów w dokumentach $d_1$ i $d_2$,\\
+$C$ i $D$ to zbiory n-gramów 4-elementowych w dokumentach $d_1$ i $d_2$.
+
+\paragraph{} 
+{\color{red}OPISAĆ ULEPSZONĄ METODĘ EKSTRAKCJI}
+
+\section{Wyniki}
+Poniższe tabele przedstawiają otrzymane podczas badań wyniki:
+
+%tabela 1
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki euklidesowej.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 30
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 87.86\%	%1
+& 85.03\%	%2
+& 89.56\%	%3
+& 88.91\%	%4
+& 89.87\%	%5
+& 90.04\%	%6
+& 90.41\%	%7
+& 90.17\%	%8
+& 90.50\%	%9
+& 90.17\%	%10
+& 89.36\%	%20
+& 88.64\%	%30
+& 88.05\%	%60
+& 86.86\%	%100
+& 90.17\% (k=8,10)
+\\ \hline
+Reuters
+- topics
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\\ \hline
+Przepisy
+- kulinarne 
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+&
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+{\color{blue}
+W tej sekcji należy zaprezentować, dla każdego przeprowadzonego eksperymentu,
+kompletny zestaw wyników w postaci tabel, wykresów itp. Powinny być one tak
+ponazywane, aby było wiadomo, do czego się odnoszą. Wszystkie tabele i wykresy
+należy oczywiście opisać (opisać co jest na osiach, w kolumnach itd.) stosując
+się do przyjętych wcześniej oznaczeń. Nie należy tu komentować i interpretować
+wyników, gdyż miejsce na to jest w kolejnej sekcji. Tu również dobrze jest
+wprowadzić oznaczenia (tabel, wykresów) aby móc się do nich odwoływać
+poniżej.}
+
+\section{Dyskusja}
+{\color{blue}
+Sekcja ta powinna zawierać dokładną interpretację uzyskanych wyników
+eksperymentów wraz ze szczegółowymi wnioskami z nich płynącymi. Najcenniejsze
+są, rzecz jasna, wnioski o charakterze uniwersalnym, które mogą być istotne
+przy innych, podobnych zadaniach. Należy również omówić i wyjaśnić wszystkie
+napotakane problemy (jeśli takie były). Każdy wniosek powinien mieć poparcie
+we wcześniej przeprowadzonych eksperymentach (odwołania do konkretnych
+wyników). Jest to jedna z najważniejszych sekcji tego sprawozdania, gdyż
+prezentuje poziom zrozumienia badanego problemu.}
+\section{Wnioski}
+{\color{blue}W tej, przedostatniej, sekcji należy zamieścić podsumowanie
+najważniejszych wniosków z sekcji poprzedniej. Najlepiej jest je po prostu
+wypunktować. Znów, tak jak poprzednio, najistotniejsze są wnioski o
+charakterze uniwersalnym.}
+
+
+\begin{thebibliography}{0}
+\end{thebibliography}
+{\color{blue} 
+Na końcu należy obowiązkowo podać cytowaną w sprawozdaniu
+literaturę, z której grupa korzystała w trakcie prac nad zadaniem (przykład na
+końcu szablonu)}
+\end{document}
