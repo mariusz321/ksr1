@@ -2,6 +2,7 @@
 #include "DiscriminatingExtractor.h"
 
 #include <QElapsedTimer>
+#include <QCoreApplication>
 
 #include <QDebug>
 
@@ -60,13 +61,23 @@ QList<QPair<QString, kwreal> > DiscriminatingExtractor::extractKeywords(const QL
     qSort(listall);
     qDebug() << listall;
     qDebug() << listall.size();
-    return result;
 #endif
-    const kwreal g = getSimiliarity(articlesWords);
+    const QStringList args(QCoreApplication::instance()->arguments());
+    kwreal argg = 0;
+    if (args.size() >= 6) {
+        argg = args.at(5).toDouble();
+    }
+    const kwreal g = (argg == 0) ? getSimiliarity(articlesWords) : argg;
     qDebug() << "g:" << g;
     kwreal *sortBuf = new kwreal[allWords.size()];
+    int start = 0;
+    int end = allWords.size();
+    if (args.size() >= 5) {
+        start = args.at(3).toInt();
+        end = qMin(args.at(4).toInt(), allWords.size());
+    }
 #pragma omp parallel for
-    for (int i = 0; i < allWords.size(); i++) {
+    for (int i = start; i < end; i++) {
 #ifdef TIMING
         QElapsedTimer timer;
         timer.start();

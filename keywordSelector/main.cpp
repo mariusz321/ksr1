@@ -13,7 +13,28 @@ int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
     if (a.arguments().size() < 3) {
-        qFatal("usage: %s [input file] [output file]\n", argv[0]);
+        qFatal("usage: %s [input file] [output file] [start index] [stop index] [g]\n", argv[0]);
+    }
+    if (a.arguments().size() >= 4) {
+        bool ok;
+        a.arguments().at(3).toInt(&ok);
+        if (!ok) {
+            qFatal("failed parsing argument 3\n");
+        }
+    }
+    if (a.arguments().size() >= 5) {
+        bool ok;
+        a.arguments().at(4).toInt(&ok);
+        if (!ok) {
+            qFatal("failed parsing argument 4\n");
+        }
+    }
+    if (a.arguments().size() >= 6) {
+        bool ok;
+        a.arguments().at(5).toDouble(&ok);
+        if (!ok) {
+            qFatal("failed parsing argument 5\n");
+        }
     }
     
     QList<QPair<QString, QString> > articles;
