@@ -34,23 +34,21 @@ QList<QPair<QString, QList<QPair<kwreal, QString> > > > MIExtractor::extractKeyw
         allWords.unite(articlesWords.at(i));
     }
 
-    QList<QPair<QString, QList<QPair<kwreal, QString> > > > result;
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-    result.reserve(allClasses.size());
-#endif
-    const QStringList &allWordsList = allWords.values();
-    const QStringList &allClassesList = allClasses.values();
+    QVector<QPair<QString, QList<QPair<kwreal, QString> > > > result(allClasses.size());
+    const QVector<QString> allWordsVector = allWords.values().toVector();
+    const QVector<QString> allClassesVector = allClasses.values().toVector();
     const float N = articles.size();
-    for (int i = 0; i < allClassesList.size(); i++) {
-        QList<QPair<kwreal, QString> > classKeywordsList;
-#if QT_VERSION >= QT_VERSION_CHECK(4, 7, 0)
-        classKeywordsList.reserve(allWordsList.size());
-#endif
-        for (int j = 0; j < allWordsList.size(); j++) {
-            const QString &word = allWordsList.at(j);
+    const QString *wordsConstPtr = allWordsVector.constData();
+    const QString *classesConstPtr = allClassesVector.constData();
+    for (int i = 0; i < allClassesVector.size(); i++) {
+        QVector<QPair<kwreal, QString> > classKeywordsVector(allWordsVector.size());
+        QPair<kwreal, QString> *keywordsPtr = classKeywordsVector.data();
+#pragma omp parallel for
+        for (int j = 0; j < allWordsVector.size(); j++) {
+            const QString &word = wordsConstPtr[j];
             int N11 = 0, N10 = 0, N01 = 0, N00 = 0;
             for (int k = 0; k < articlesWords.size(); k++) {
-                const bool classMatched = (articles.at(k).first == allClassesList.at(i));
+                const bool classMatched = (articles.at(k).first == classesConstPtr[i]);
                 if (articlesWords.at(k).contains(word)) {
                     if (classMatched) {
                         ++N11;
@@ -77,16 +75,11 @@ QList<QPair<QString, QList<QPair<kwreal, QString> > > > MIExtractor::extractKeyw
             sum += fN01 / N * log2(N * fN01 / ((fN01 + fN00) * (fN01 + fN11)));
             sum += fN10 / N * log2(N * fN10 / ((fN10 + fN11) * (fN10 + fN00)));
             sum += fN00 / N * log2(N * fN00 / ((fN10 + fN00) * (fN01 + fN00)));
-            classKeywordsList.append(qMakePair(sum, word));
+            keywordsPtr[j] = qMakePair(sum, word);
         }
-        qSort(classKeywordsList);
-        result.append(qMakePair(allClassesList.at(i), classKeywordsList));
-        /*const int count = 10;
-        qDebug() << "class" << allClassesList.at(i);
-        for (int j = classKeywordsList.size() - 1; j >= classKeywordsList.size() - count; j--) {
-            qDebug() << classKeywordsList.at(j).first << classKeywordsList.at(j).second;
-        }*/
+        qSort(classKeywordsVector);
+        result[i] = (qMakePair(classesConstPtr[i], classKeywordsVector.toList()));
     }
 
-    return result;
+    return result.toList();
 }
