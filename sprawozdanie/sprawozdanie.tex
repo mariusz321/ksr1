@@ -3,6 +3,7 @@
 \usepackage{color}
 \usepackage{ltablex}
 \usepackage{makebox}
+\usepackage{amsmath}
 
 \studycycle{Informatyka, studia dzienne, II st.}
 \coursesemester{II}
@@ -52,7 +53,35 @@ Celem ekstrakcji cech tekstu jest reprezentacja tekstu w postaci wektorów cech,
 \paragraph{}
 Jedna z metod ograniczenia zbioru rozważanych słów polega na zliczeniu ilość wystąpień poszczególnych słów w całym zbiorze dokumentów oraz odrzuceniu tych które występują najczęściej i najrzadziej (odpowiednie progi należy dobrać doświadczalnie). W ten sposób usuwamy słowa niezwiązane z konkretną klasą dokumentów - słowa występujące tylko w pojedynczych dokumentach lub występujące w prawie każdym dokumencie jak na przykład spójniki, zaimki itd.
 
-{\color{red} OPISAĆ DRUGĄ METODĘ!!!!!!!!!!!}
+Do wyboru słów kluczowych wykorzystaliśmy dwa algorytmy: \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.} oraz \textit{mutual information}\footnote{Ze względu na nieznajomość polskiego tłumaczenia tej nazwy, będziemy używać jej oryginalnego określenia. Gdybyśmy mieli nazwę tę przetłumaczyć, brzmiałaby ona następująco: ,,metoda informacji wspólnej''.}
+
+\subsubsection{Gęstość informacji}
+Dla danego zbioru $A_p$ dokumentów $X_i$ składających się ze słow $x_j$ poszukujemy takich słów, dla których parametr $f^k_l$, oznaczający liczbę wystąpień słowa $x_l$ w dokumencie $X_k$, spełnia następujące cechy:
+\begin{equation}
+ \exists_{A_1, A_2} A_1 \cup A_2 = A, A_1 \cap A_2 = \emptyset \mbox{ oraz } \forall_{X_i \in A_1} \forall_{X_j \in A_2} f^i_x \gg f^j_x
+\end{equation}
+
+Oznacza to, że poszukujemy słów, które występują głównie w ograniczonym zbiorze dokumentów i występują w nim dostatecznie często.
+
+Określmy funkcję podobieństwa $P$ następująco:
+
+\begin{equation}
+ P(X_i, X_j) = \frac {\mu(X_i \cap X_j)} {\mu(X_i \cup X_j)}
+\end{equation}
+
+Po wyznaczeniu wszystkich wartości funkcji $P$ należy je zsumować z pominięciem głównej przekątnej uzyskanej macierzy:
+\begin{equation}
+ G = \sum _{i, j = 1; i \neq j}^{m} P(X_i, X_j)
+\end{equation}
+Otrzymaną w ten sposób wartość $G$ nazywać będziemy \textit{gęstością zbioru dokumentów}. Przez wartość $G_x$ oznaczymy gęstość dokumentów po usunięciu z nich słowa $x$.
+
+\textit{Wartością dyskryminacyjną słowa $x$} będziemy nazywać wielkość $g(x)$ określoną w następujący sposób:
+\begin{equation}
+ g(x) = G_x - G
+\end{equation}
+
+Słowo $x$ zostanie wyznaczone jako możliwe słowo kluczowe (będzie \textit{dobrym dyskryminatorem}) jeśli będzie zwiększać gęstość zbioru dokumentów $A$ ($g(x) > 0$). Słowo $x$ zostanie odrzucone, jeśli jego wartość dyskryminacyjna będzie ujemna, ponieważ jego usunięcie zmniejsza gęstość zbioru dokumentów $A$.
+
   
 Do wyznaczenia wag poszczególnych słów kluczowych w tesktach można wykorzystać algorytm 
 \textbf{TF-IDF}.
@@ -136,7 +165,7 @@ Aplikacja ta zawiera klasę \verb|SgmlReader|, która w metodzie \verb|readDirec
 Zapis do nowego formatu wykonuje klasa \verb|ArticleWriter|.
 
 \subsection{keywordSelector}
-Aplikacja implementuje dwie metody wyboru słów kluczowych: \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.} oraz \textit{mutual information}\footnote{Ze względu na nieznajomość polskiego tłumaczenia tej nazwy, będziemy używać jej oryginalnego określenia. Gdybyśmy mieli nazwę tę przetłumaczyć, brzmiałaby ona następująco: ,,metoda informacji wspólnej''.}, implementowane odpowiednio przez klasy   \verb|DiscriminatingExtractor| oraz \verb|MIExtractor|.
+Aplikacja implementuje dwie metody wyboru słów kluczowych: \textit{gęstości informacji} oraz \textit{mutual information}, implementowane odpowiednio przez klasy   \verb|DiscriminatingExtractor| oraz \verb|MIExtractor|.
 
 Obie metody odziedziczają interfejs \verb|KeywordExtractorInterface|, dzięki czemu możliwy jest dogodny wybór sposobu ekstrakcji słów kluczowych.
 
