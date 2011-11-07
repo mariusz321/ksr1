@@ -3,7 +3,7 @@
 % $Id$
 
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{classrep}[2009/11/27 ICS Class Assignment Report]
+\ProvidesClass{classrep}[2009/04/24 ICS Class Assignment Report]
 
 \LoadClass[12pt,a4paper,authortitle]{mwart}
 \usepackage[OT4]{polski}
@@ -47,7 +47,7 @@
 \newcommand\@typesetauthors{%
     {\normalsize
       \begin{tabular}[t]{lrl}%
-        \large\strut\@author
+        \large\strut\ignorespaces\@author
       \end{tabular}\par}%
 }
 \renewcommand{\and}{\\ \large\strut}
