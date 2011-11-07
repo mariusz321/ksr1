@@ -55,7 +55,7 @@ Jedna z metod ograniczenia zbioru rozważanych słów polega na zliczeniu liczby
 
 
 \subsubsection{Gęstość informacji}
-Drugim wykorzystanym przez nas sposobem wybory słów kluczowych jest algorytm \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.}
+Drugim wykorzystanym przez nas sposobem wyboru słów kluczowych jest algorytm \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.}
 Dla danego zbioru $A_p$ dokumentów $X_i$ składających się ze słow $x_j$ poszukujemy takich słów, dla których parametr $f^k_l$, oznaczający liczbę wystąpień słowa $x_l$ w dokumencie $X_k$, spełnia następujące cechy:
 \begin{equation}
  \exists_{A_1, A_2} A_1 \cup A_2 = A, A_1 \cap A_2 = \emptyset \mbox{ oraz } \forall_{X_i \in A_1} \forall_{X_j \in A_2} f^i_x \gg f^j_x
@@ -145,18 +145,30 @@ Aplikacja została podzielona na cztery główne moduły:
 \begin{itemize}
  \item \verb|sgmlExtractor| \ppauza prosta aplikacja służąca do ekstrakcji danych z plików formatu \verb|SGML| na prostszy w obsłudze format,
  \item \verb|keywordSelector| \ppauza aplikacja służąca do wyboru słów kluczowych dla zadanego tekstu,
- \item \verb|stemmer| \ppauza aplikacja dokonująca rdzeniownie tekstu,
- \item \verb|classifier| \ppauza główna aplikacja zadania, która dokonuje klasyfikacji danych wejściowych.
+ \item \verb|stemmer| \ppauza aplikacja dokonująca rdzeniowanie tekstu,
+ \item \verb|classifier| \ppauza główna aplikacja zadania, która dokonuje ekstrakcji wektorów cech oraz klasyfikacji danych wejściowych.
 \end{itemize}
-Z wyjątkiem aplikacji \verb|stemmer|, wszystkie opisane powyżej aplikacje wykonane zotały przy użyciu frameworka \verb|Qt|, w języku \verb|C++|.
+Z wyjątkiem aplikacji \verb|stemmer|, wszystkie opisane powyżej aplikacje wykonane zostały przy użyciu frameworka \verb|Qt|, w języku \verb|C++|.
+
+Wyekstrahowane wektory cech są zapisywany oraz później odczytywane z pliku o następującym formacie:
+\begin{verbatim}
+ etykieta1
+ [x1_1;x1_2;...;x1_n]  //wektor cech
+ etykieta2
+ [x2_1;x2_2;...;x2_n]
+ ...
+\end{verbatim}
+W ten sposób została uzyskana niezależność klasyfikacji od rodzaju danych wejściowych.
+
 
 \subsection{sgmlExtractor}
-Aplikacja ta ekstrahuje dane z pliku o strukturze \verb|SGML| do pliku o następującym formacie:
+Aplikacja ta przekształca dane z pliku o strukturze \verb|SGML| do pliku o następującym formacie:
 \begin{verbatim}
  etykieta1
  tekst1
  etykieta2
  tekst2
+ ...
 \end{verbatim}
 Pozwala to na szybkie wczytanie danych, a także na ich łatwą interpretację przez człowieka \ppauza dane można edytować bez większych obaw o ,,zepsucie'' formatu pliku.
 
@@ -596,6 +608,8 @@ Przepisy
 \setlength{\LTleft}{-20cm plus -1fill}
 \setlength{\LTright}{\LTleft}
 
+\clearpage
+
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
 \caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki ulicznej.}\\ 
 \hline
@@ -865,6 +879,7 @@ Przepisy
 
 
 
+\clearpage
 %tabela 8
 
 \begingroup
