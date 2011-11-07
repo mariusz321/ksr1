@@ -179,7 +179,7 @@ dokumentów
 & 9
 & 10
 & 20
-& 30
+& 40
 & 60
 & 100
 & Najlepszy wynik
@@ -204,53 +204,506 @@ Reuters
 \\ \hline
 Reuters
 - topics
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
+& 91.26\%	%1
+& 86.41\%	%2
+& 90.29\%	%3
+& 88.35\%	%4
+& 91.26\%	%5
+& 91.75\%	%6
+& 93.20\%	%7
+& 92.72\%	%8
+& 93.20\%	%9
+& 92.23\%	%10
+& 92.23\%	%20
+& 91.26\%	%40
+& 91.75\%	%60
+& 92.72\%	%100
+& 93.20\% (k=7,9)
 \\ \hline
 Przepisy
 - kulinarne 
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
-&
+& 77.5\%	%1
+& 80\%		%2
+& 80\%		%3
+& 77.5\%	%4
+& 77.5\%	%5
+& 80\%		%6
+& 75\%		%7
+& 77.5\%	%8
+& 77.5\%	%9
+& 80\%		%10
+& 90\%		%20
+& 77.5\%	%40
+& ---		%60
+& ---		%100
+& 90\% (k=20)
 \\ \hline
 \end{longtable}
 }
 \endgroup
 
-{\color{blue}
-W tej sekcji należy zaprezentować, dla każdego przeprowadzonego eksperymentu,
-kompletny zestaw wyników w postaci tabel, wykresów itp. Powinny być one tak
-ponazywane, aby było wiadomo, do czego się odnoszą. Wszystkie tabele i wykresy
-należy oczywiście opisać (opisać co jest na osiach, w kolumnach itd.) stosując
-się do przyjętych wcześniej oznaczeń. Nie należy tu komentować i interpretować
-wyników, gdyż miejsce na to jest w kolejnej sekcji. Tu również dobrze jest
-wprowadzić oznaczenia (tabel, wykresów) aby móc się do nich odwoływać
-poniżej.}
+
+%tabela 2
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki manhattan.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 85.64\%	%1
+& 71.25\%	%2
+& 85.48\%	%3
+& 74.63\%	%4
+& 85.33\%	%5
+& 84.52\%	%6
+& 84.83\%	%7
+& 84.29\%	%8
+& 84.31\%	%9
+& 83.92\%	%10
+& 82.65\%	%20
+& 81.26\%	%40
+& 81.25\%	%60
+& 81.23\%	%100
+& 85.64\% (k=1)
+\\ \hline
+Reuters
+- topics
+& 91.26\%	%1
+& 88.35\%	%2
+& 89.81\%	%3
+& 91.26\%	%4
+& 91.26\%	%5
+& 92.72\%	%6
+& 91.75\%	%7
+& 92.23\%	%8
+& 91.75\%	%9
+& 91.75\%	%10
+& 91.75\%	%20
+& 90.78\%	%40
+& 89.32\%	%60
+& 88.34\%	%100
+& 92.72\%  (k=6)
+\\ \hline
+Przepisy
+- kulinarne 
+& 62.5\%	%1
+& 57.5\%	%2
+& 75\%		%3
+& 62.5\%	%4
+& 80\%		%5
+& 72.5\%	%6
+& 82.5\%	%7
+& 75\%		%8
+& 75\%		%9
+& 77.5\%	%10
+& 85\%		%20
+& 82.5\%	%40
+& ---		%60
+& ---		%100
+& 92.5\% (k=17)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+%tabela 3
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki Czebyszewa.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 79.23\%	%1
+& 72.71\%	%2
+& 81.58\%	%3
+& 81.67\%	%4
+& 83.46\%	%5
+& 83.70\%	%6
+& 84.40\%	%7
+& 84.29\%	%8
+& 84.42\%	%9
+& 84.52\%	%10
+& 84.16\%	%20
+& 83.09\%	%40
+& 82.13\%	%60
+& 81.41\%	%100
+& 84.59\% (k=11)
+\\ \hline
+Reuters
+- topics
+& 75.73\%	%1
+& 75.24\%	%2
+& 74.76\%	%3
+& 72.82\%	%4
+& 70.87\%	%5
+& 68.45\%	%6
+& 68.93\%	%7
+& 66.99\%	%8
+& 66.99\%	%9
+& 65.05\%	%10
+& 57.28\%	%20
+& 41.75\%	%40
+& 34.95\%	%60
+& 45.14\%	%100
+& 75.73\%	(k=1)
+\\ \hline
+Przepisy
+- kulinarne 
+& 67.5\%	%1
+& 72.5\%	%2
+& 65\%		%3
+& 75\%		%4
+& 62.5\%	%5
+& 67.5\%	%6
+& 70\%		%7
+& 72.5\%	%8
+& 65\%		%9
+& 72.5\%	%10
+& 60\%		%20
+& 52.5\%	%40
+& ---		%60
+& ---		%100
+& 75\% (k=4)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+
+%tabela 4
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla podobieństwa tekstów za pomocą miary Jaccarda.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 88.30\%	%1
+& 85.83\%	%2
+& 89.70\%	%3
+& 89.67\%	%4
+& 89.67\%	%5
+& 89.32\%	%6
+& 89.63\%	%7
+& 89.63\%	%8
+& 89.62\%	%9
+& 89.63\%	%10
+& 88.71\%	%20
+& 86.83\%	%40
+& 85.55\%	%60
+& 83.92\%	%100
+& 89.70\%	(k=3)
+\\ \hline
+Reuters
+- topics
+& 85.92\%	%1
+& 82.52\%	%2
+& 83.98\%	%3
+& 83.50\%	%4
+& 86.41\%	%5
+& 87.86\%	%6
+& 87.86\%	%7
+& 83.98\%	%8
+& 86.89\%	%9
+& 86.41\%	%10
+& 86.89\%	%20
+& 85.44\%	%40
+& 81.55\%	%60
+& 82.04\%	%100
+& 87.86\%	(k=6,7)
+\\ \hline
+Przepisy
+- kulinarne 
+& 85\%		%1
+& 80\%		%2
+& 85\%		%3
+& 82.5\%	%4
+& 85\%		%5
+& 82.5\%	%6
+& 87.5\%	%7
+& 82.5\%	%8
+& 90\%		%9
+& 82.5\%	%10
+& 85\%		%20
+& 87.5\%	%40
+& ---		%60
+& ---		%100
+& 90\% (k=9)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+%tabela 5
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla podobieństwa tekstów za pomocą n-gramów 4-elementowych.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 78.38\%	%1
+& 75.96\%	%2
+& 79.73\%	%3
+& 79.36\%	%4
+& 80.11\%	%5
+& 80.14\%	%6
+& 80.49\%	%7
+& 80.34\%	%8
+& 80.49\%	%9
+& 80.38\%	%10
+& 80.43\%	%20
+& 80.24\%	%40
+& 80.21\%	%60
+& 80.24\%	%100
+& 80.54\%	(k=16)
+\\ \hline
+Reuters
+- topics
+& 60.19\%	%1
+& 57.77\%	%2
+& 63.59\%	%3
+& 61.17\%	%4
+& 61.17\%	%5
+& 59.71\%	%6
+& 61.17\%	%7
+& 59.71\%	%8
+& 61.66\%	%9
+& 61.66\%	%10
+& 66.50\%	%20
+& 71.36\%	%40
+& 70.87\%	%60
+& 74.27\%	%100
+& 75.72\%	(k=97)
+\\ \hline
+Przepisy
+- kulinarne 
+& 77.5\%	%1
+& 70\%		%2
+& 82.5\%	%3
+& 72.5\%	%4
+& 75\%		%5
+& 72.5\%	%6
+& 82.5\%	%7
+& 80\%		%8
+& 87.5\%	%9
+& 87.5\%	%10
+& 82.5\%	%20
+& 92.5\%	%40
+& ---		%60
+& ---		%100
+& 95\% (k=41)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+%tabela 6
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla podobieństwa tekstów za pomocą zmodyfikowanej miary Jaccarda.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 88.54\%	%1
+& 85.64\%	%2
+& 89.39\%	%3
+& 89.49\%	%4
+& 90.23\%	%5
+& 89.89\%	%6
+& 89.78\%	%7
+& 89.87\%	%8
+& 89.63\%	%9
+& 89.65\%	%10
+& 88.34\%	%20
+& 86.66\%	%40
+& 85.35\%	%60
+& 83.70\%	%100
+
+& 90.23\%	(k=5)
+\\ \hline
+Reuters
+- topics
+& 83.98\%	%1
+& 82.52\%	%2
+& 84.46\%	%3
+& 86.41\%	%4
+& 84.95\%	%5
+& 88.35\%	%6
+& 87.38\%	%7
+& 85.44\%	%8
+& 85.92\%	%9
+& 85.44\%	%10
+& 81.55\%	%20
+& 80.10\%	%40
+& 81.07\%	%60
+& 81.07\%	%100
+
+& 88.35\%	(k=6)
+\\ \hline
+Przepisy
+- kulinarne 
+& 92.5\%	%1
+& 82.5\%	%2
+& 80\%		%3
+& 80\%		%4
+& 80\%		%5
+& 77.5\%	%6
+& 80\%		%7
+& 77.5\%	%8
+& 85\%		%9
+& 82.5\%	%10
+& 85\%		%20
+& 85\%		%40
+& ---		%60
+& ---		%100
+& 92.5\% (k=1,13)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
 
 \section{Dyskusja}
 {\color{blue}
