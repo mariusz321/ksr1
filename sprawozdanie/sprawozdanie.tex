@@ -33,7 +33,7 @@ Następnie dla zadanego zestawu danych tekstowych oraz zebranych przez siebie 10
 Kolejny krok to porównanie wyników dla poszczególnych metod oraz opcjonalnie zaproponowanie własnej metody ekstrakcji oraz miary podobieństwa, poprawiającej uzyskiwane wyniki. 
 
 \section{Wprowadzenie}
-\subsection{Algorytm k-nn}
+\subsection{Algorytm k-NN}
 Algorytm k najbliższych sąsiadów (lub algorytm k-nn z ang. \textit{k nearest neighbours}) jest jednym z algorytmów używanych do klasyfikacji danych. 
 
 Algorytm zakłada istnienie zbioru uczącego zawierającego obserwacje, z których każda ma przypisany wektor zmiennych objaśniających $X$ oraz zmienną objaśnianą $Y$ (etykietę). Wtedy dla pewnej obserwacji $C$ z przypisanym wektorem zmiennych objaśniających $X$ możemy prognozować wartość zmiennej objaśnianej $Y$, czyli możemy dokonać klasyfikacji.
@@ -170,7 +170,9 @@ Aplikacja implementuje dwie metody wyboru słów kluczowych: \textit{gęstości 
 Obie metody odziedziczają interfejs \verb|KeywordExtractorInterface|, dzięki czemu możliwy jest dogodny wybór sposobu ekstrakcji słów kluczowych.
 
 \subsection{stemmer}
-{\color{red} OPPISAĆ STEMMER w kilku slowach}
+Aplikacja została napisana w języku Java i wykorzystuje bibliotekę JWNL do połączenie ze słownikiem WordNet. Obsługa WordNeta jest realizowana w klasie \verb|WordNetStemmer|
+ 
+WordNet jest słownikiem zawierającym bazę słów w języku angielskim razem z relacjami semantycznymi i leksykalnymi pomiędzy nimi. Umożliwia on m.in. rdzeniowanie (ang. \textit{stemming}) wyrazów, czyli otrzymanie formy podstawowej słowa. Dzięki zamianie wyrazów na ich formy podstawowe, odmiany tego samego słowa nie są rozróżniane, co ułatwia klasyfikację.
 
 \subsection{classifier}
 Aplikacja ta może działać w trzech trybach: klasyfikowania za pomocą metody $k$-NN, badania podobieństwa tekstów oraz ekstrakcji cech.
