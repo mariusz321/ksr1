@@ -21,7 +21,6 @@
 }
 
 \title{Zadanie Numer 1: Ekstrakcja cech, miary podobieństwa, klasyfikacja}
-\svnurl{}
 
 \begin{document}
 \maketitle
@@ -49,14 +48,14 @@ Algorytm polega na:
 \end{enumerate}
 
 \subsection{Ekstrakcja cech tekstu}
-Celem ekstrakcji cech tekstu jest reprezentacja tekstu w postaci wektorów cech, które następnie można porównać ze sobą. W przypadku tekstu za jego cechy można przyjąć występujące w nim słowa. Badanie wszystkich słów występujących w zbiorze dokumentów byłoby zbyt kosztowne, dlatego należy wybrać cześć z nich (słowa kluczowe), najlepiej charakteryzujące poszczególne dokumenty. Następnie dla każdego dokumentu należy utworzyć wektor wag liczbowych poszczególnych słów kluczowych.
+Celem ekstrakcji cech tekstu jest reprezentacja tekstu w postaci wektorów cech, które następnie można porównać ze sobą. W przypadku tekstu za jego cechy można przyjąć występujące w nim słowa. Badanie wszystkich słów występujących w zbiorze dokumentów byłoby zbyt kosztowne, dlatego należy wybrać cześć z nich (słowa kluczowe), najlepiej charakteryzujące poszczególne dokumenty. Następnie dla każdego dokumentu należy utworzyć wektor wag liczbowych dla poszczególnych słów kluczowych.
 
-\paragraph{}
-Jedna z metod ograniczenia zbioru rozważanych słów polega na zliczeniu ilość wystąpień poszczególnych słów w całym zbiorze dokumentów oraz odrzuceniu tych które występują najczęściej i najrzadziej (odpowiednie progi należy dobrać doświadczalnie). W ten sposób usuwamy słowa niezwiązane z konkretną klasą dokumentów - słowa występujące tylko w pojedynczych dokumentach lub występujące w prawie każdym dokumencie jak na przykład spójniki, zaimki itd.
+\subsubsection{Liczba wystąpień słów}
+Jedna z metod ograniczenia zbioru rozważanych słów polega na zliczeniu liczby wystąpień poszczególnych wyrazów w całym zbiorze dokumentów oraz odrzuceniu tych, które występują najczęściej i najrzadziej (odpowiednie progi należy dobrać doświadczalnie). W ten sposób usuwamy słowa niezwiązane z konkretną klasą dokumentów - słowa występujące tylko w pojedynczych dokumentach lub występujące w prawie każdym dokumencie jak na przykład spójniki, zaimki itd.
 
-Do wyboru słów kluczowych wykorzystaliśmy dwa algorytmy: \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.} oraz \textit{mutual information}\footnote{Ze względu na nieznajomość polskiego tłumaczenia tej nazwy, będziemy używać jej oryginalnego określenia. Gdybyśmy mieli nazwę tę przetłumaczyć, brzmiałaby ona następująco: ,,metoda informacji wspólnej''.}
 
 \subsubsection{Gęstość informacji}
+Drugim wykorzystanym przez nas sposobem wybory słów kluczowych jest algorytm \textit{gęstości informacji}\footnote{W cytowanej literaturze opisywana metoda nie posiada nazwy.}
 Dla danego zbioru $A_p$ dokumentów $X_i$ składających się ze słow $x_j$ poszukujemy takich słów, dla których parametr $f^k_l$, oznaczający liczbę wystąpień słowa $x_l$ w dokumencie $X_k$, spełnia następujące cechy:
 \begin{equation}
  \exists_{A_1, A_2} A_1 \cup A_2 = A, A_1 \cap A_2 = \emptyset \mbox{ oraz } \forall_{X_i \in A_1} \forall_{X_j \in A_2} f^i_x \gg f^j_x
@@ -83,9 +82,9 @@ Otrzymaną w ten sposób wartość $G$ nazywać będziemy \textit{gęstością z
 
 Słowo $x$ zostanie wyznaczone jako możliwe słowo kluczowe (będzie \textit{dobrym dyskryminatorem}) jeśli będzie zwiększać gęstość zbioru dokumentów $A$ ($g(x) > 0$). Słowo $x$ zostanie odrzucone, jeśli jego wartość dyskryminacyjna będzie ujemna, ponieważ jego usunięcie zmniejsza gęstość zbioru dokumentów $A$.
 
-  
-Do wyznaczenia wag poszczególnych słów kluczowych w tesktach można wykorzystać algorytm 
-\textbf{TF-IDF}.
+\subsubsection{Algorytm TF-IDF}  
+Do wyznaczenia wag poszczególnych słów kluczowych w tekstach można wykorzystać algorytm 
+TF-IDF.
 
 \paragraph{}
 Wartość TF-IDF oblicza się ze wzoru:
@@ -103,7 +102,7 @@ $idf_{i}$ to "inverse document frequency", wyrażana wzorem:
 
 $$idf_{i} =  \log \frac{|D|}{|\{d: t_{i} \in d\}}$$
 
-Gdzie:
+Gdzie:\\
 $|D|$ - liczba dokumentów w zbiorze\\
 $|\{d : t_{i} \in d\}|$ - liczba dokumentów zawierających przynajmniej jedno wystąpienie danego słowa.
 
@@ -208,7 +207,8 @@ Wykorzystane zostały tylko artykuły, które w danej kategorii posiadają dokł
 \paragraph{}
 We wszystkich badaniach zbiór danych został podzielony na 60\% danych uczących i 40\% danych testowych.
 \paragraph{}
-W każdym zbiorze tekstów zostały wyodrębnione wektory cech dla poszczególnych dokumentów metodami opisanymi w rozdziale 2, a następnie dokonano klasyfikacji za pomocą algorytmu k-NN dla $k$ z zakresu 1-100. Do badania odległości wektorów wykorzystano opisane wcześniej metryki: eklidesową, uliczną i Czebyszewa.\\
+W każdym zbiorze tekstów zostały wyodrębnione wektory cech dla poszczególnych dokumentów metodami opisanymi w rozdziale 2, a następnie dokonano klasyfikacji za pomocą algorytmu k-NN dla $k$ z zakresu 1-100. W przypadku metody ekstrakcji opartej na liczbie wystąpień słów, jako słowa kluczowe wybrano te z zakresu 90-99\% najczęściej występujących, co dawało optymalne rezultaty.
+Do badania odległości wektorów wykorzystano opisane wcześniej metryki: euklidesową, uliczną i Czebyszewa. Dla metryki euklidesowej i Czebyszewa została zastosowana normalizacja wektorów, ponieważ znacznie poprawiło to osiągane wyniki.\\
 Również dla każdego zestawu tekstów policzono wartości podobieństwa ze tekstów zbioru treningowego do tekstów ze zbioru uczącego i dokonano klasyfikacji za pomocą k-NN.
 
 Dodatkowo w celu poprawy otrzymywanych wyników została zastosowana zmodyfikowana przez nas metoda Jaccarda do określania podobieństwa tekstów: $$sim(d_1, d_2) = \sqrt{J(A ,B)*J(C, D)}$$\\
@@ -216,8 +216,6 @@ gdzie:\\
 $A$ i $B$ to zbiory słów w dokumentach $d_1$ i $d_2$,\\
 $C$ i $D$ to zbiory n-gramów 4-elementowych w dokumentach $d_1$ i $d_2$.
 
-\paragraph{} 
-{\color{red}OPISAĆ ULEPSZONĄ METODĘ EKSTRAKCJI}
 
 \section{Wyniki}
 Poniższe tabele przedstawiają otrzymane podczas badań wyniki:
@@ -230,7 +228,7 @@ Poniższe tabele przedstawiają otrzymane podczas badań wyniki:
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
-\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki euklidesowej.}\\ 
+\caption{ Procent poprawnych wyników dla metody ekstrakcji opartej na liczbie wystąpień słów i dla metryki euklidesowej.}\\ 
 \hline
 
 Zbiór
@@ -321,7 +319,7 @@ Przepisy
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
-\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki ulicznej.}\\ 
+\caption{ Procent poprawnych wyników dla metody ekstrakcji opartej na liczbie wystąpień słów i dla metryki ulicznej.}\\ 
 \hline
 
 Zbiór
@@ -413,7 +411,7 @@ Przepisy
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
-\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki Czebyszewa.}\\ 
+\caption{ Procent poprawnych wyników dla metody ekstrakcji opartej na liczbie wystąpień słów i dla metryki Czebyszewa.}\\ 
 \hline
 
 Zbiór
@@ -506,7 +504,7 @@ Przepisy
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
-\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki euklidesowej.}\\ 
+\caption{ Procent poprawnych wyników dla metody gęstości informacji i metryki euklidesowej.}\\ 
 \hline
 
 Zbiór
@@ -569,10 +567,21 @@ Reuters
 \\ \hline
 Przepisy
 - kulinarne 
-
+& 60\%		%1
+& 62.5\%	%2
+& 62.5\%	%3
+& 65\%		%4
+& 67.5\%	%5
+& 70\%		%6
+& 75\%		%7
+& 70\%		%8
+& 70\%		%9
+& 65\%		%10
+& 45\%		%20
+& 45\%		%40
 & ---		%60
 & ---		%100
-& 75\% (k=4)
+& 75\% (k=7)
 \\ \hline
 \end{longtable}
 }
@@ -650,10 +659,21 @@ Reuters
 \\ \hline
 Przepisy
 - kulinarne 
-
+& 72.5\%	%1
+& 72.5\%	%2
+& 75\%		%3
+& 77.5\%	%4
+& 72.5\%	%5
+& 70\%		%6
+& 65\%		%7
+& 62.5\%	%8
+& 62.5\%	%9
+& 65\%		%10
+& 60\%		%20
+& 45\%		%40
 & ---		%60
 & ---		%100
-& 75\% (k=4)
+& 77.5\% (k=4)
 \\ \hline
 \end{longtable}
 }
@@ -669,7 +689,7 @@ Przepisy
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
-\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki Cebyszewa.}\\ 
+\caption{ Procent poprawnych wyników dla metody gęstości informacji i metryki Cebyszewa.}\\ 
 \hline
 
 Zbiór
@@ -731,10 +751,21 @@ Reuters
 \\ \hline
 Przepisy
 - kulinarne 
-
+& 60\%	%1
+& 60\%	%2
+& 60\%		%3
+& 60\%	%4
+& 60\%	%5
+& 60\%		%6
+& 60\%		%7
+& 60\%	%8
+& 60\%	%9
+& 60\%		%10
+& 60\%		%20
+& 60\%		%40
 & ---		%60
 & ---		%100
-& 75\% (k=4)
+& 60\% (k=1-100)
 \\ \hline
 \end{longtable}
 }
@@ -1021,13 +1052,15 @@ Przepisy
 
 
 \section{Dyskusja}
-W metodzie $k$-NN metryka Czebyszewa daje najgorsze wyniki spośród badanych metryk, ponieważ jest bardzo wrażliwa na maksymalną różnicę współrzędnych i nawet jeżeli pozostałe współrzędne są podobne, to wektory są klasyfikowane jako odległe od siebie. Metryki euklidesowa i manhattan dają podobne, dobre rezultaty, chociaż metryka euklidesowa jest nieznacznie lepsza.
+W metodzie $k$-NN metryka Czebyszewa daje najgorsze wyniki spośród badanych metryk, ponieważ jest bardzo wrażliwa na maksymalną różnicę współrzędnych i nawet jeżeli pozostałe współrzędne są podobne, to wektory są klasyfikowane jako odległe od siebie. Metryki euklidesowa i uliczna dają podobne, dobre rezultaty, chociaż metryka euklidesowa jest nieznacznie lepsza.
 
 Współczynnik Jaccarda dobrze sprawdza się jako miara podobieństwa tekstów. Metoda n-gramów jest skuteczna jedynie dla tekstów gdzie we wszystkich artykułach w danej kategorii występują podobne słowa (przypadek dla przepisow kulinarnych).
 
 Jak pokazuje zmodyfikowana przez nas miara Jaccarda, połączenie ze sobą kilku metod może przynieść poprawę wyników; do uzyskania znacznej poprawy konieczna jest jednak dogłębna znajomość dziedziny.
 
-Metody nie sprawiają wrażenia złożonych obliczeniowo, jednak ilość danych, jaką muszą one przetworzyć jest znaczna. Implementacja metod jest bardzo dobrym polem do optymalizacji, niejednokrotnie zdarzało się nam przyspieszyć program o więcej niż 2$\times$. Wciąż nie pozwoliło to jednak na policzenie wyników w rozsądnym czasie dla wszystkich testów \ppauza z części testów musieliśmy zrezygnować.
+Metoda ekstrakcji cech tekstów oparta na liczbie wystąpień słów, pomimo że wydaje się prosta, okazała się dużo bardziej skuteczna od metody gęstości informacji
+
+Zaimplementowane Metody nie sprawiają wrażenia złożonych obliczeniowo, jednak ilość danych, jaką muszą one przetworzyć jest znaczna. Implementacja metod jest bardzo dobrym polem do optymalizacji, niejednokrotnie zdarzało się nam przyspieszyć program o więcej niż 2x. Wciąż nie pozwoliło to jednak na policzenie wyników w rozsądnym czasie dla wszystkich testów \ppauza z części testów musieliśmy zrezygnować.
 
 \section{Wnioski}
 \begin{itemize}
@@ -1038,8 +1071,10 @@ Metody nie sprawiają wrażenia złożonych obliczeniowo, jednak ilość danych,
 \end{itemize}
 
 \begin{thebibliography}{0}
-\bibitem{dab78}
-Dąbrowski M., Laus-Mączyńska K., \textit{Metody wyszukiwania i klasyfikacji informacji}.
-Wydawnictwa Naukowo-Techniczne, Warszawa 1978.
+	\bibitem .http://ics.p.lodz.pl/~aniewiadomski/ksr/ksr-wyklad-2009.pdf
+	\bibitem .http://microarray.republika.pl/pdf/Dod\_B1.pdf	
+	\bibitem .http://pl.wikipedia.org/wiki/Algorytm\_k\_najbli\%C5\%BCszych\_s\%C4\%85siad\%C3\%B3w
+	\bibitem .http://pl.wikipedia.org/wiki/TFIDF
+	
 \end{thebibliography}
 \end{document}
