@@ -49,7 +49,7 @@ Algorytm polega na:
 \end{enumerate}
 
 \subsection{Ekstrakcja cech tekstu}
-Celem ekstrakcji cech tekstu jest reprezentacja tekstu w postaci wektorów cech, które następnie można porównać ze sobą. W przypadku tekstu za jego cechy można przyjąć występujące w nim słowa. Badanie wszystkich słów występujących w zbiorze dokumentów byłoby zbyt kosztowne, dlatego należy wybrać cześć z nich (słowa kluczowe), najlepiej charakteryzujących poszczególne dokumenty. Następnie dla każdego dokumentu należy utworzyć wektor wag liczbowych poszczególnych słów kluczowych.
+Celem ekstrakcji cech tekstu jest reprezentacja tekstu w postaci wektorów cech, które następnie można porównać ze sobą. W przypadku tekstu za jego cechy można przyjąć występujące w nim słowa. Badanie wszystkich słów występujących w zbiorze dokumentów byłoby zbyt kosztowne, dlatego należy wybrać cześć z nich (słowa kluczowe), najlepiej charakteryzujące poszczególne dokumenty. Następnie dla każdego dokumentu należy utworzyć wektor wag liczbowych poszczególnych słów kluczowych.
 
 \paragraph{}
 Jedna z metod ograniczenia zbioru rozważanych słów polega na zliczeniu ilość wystąpień poszczególnych słów w całym zbiorze dokumentów oraz odrzuceniu tych które występują najczęściej i najrzadziej (odpowiednie progi należy dobrać doświadczalnie). W ten sposób usuwamy słowa niezwiązane z konkretną klasą dokumentów - słowa występujące tylko w pojedynczych dokumentach lub występujące w prawie każdym dokumencie jak na przykład spójniki, zaimki itd.
@@ -321,7 +321,7 @@ Przepisy
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
-\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki manhattan.}\\ 
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki ulicznej.}\\ 
 \hline
 
 Zbiór
@@ -506,6 +506,208 @@ Przepisy
 \setlength{\LTright}{\LTleft}
 
 \begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki euklidesowej.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 79.18\%	%1
+& 77.72\%	%2
+& 79.93\%	%3
+& 79.38\%	%4
+& 80.27\%	%5
+& 79.97\%	%6
+& 80.48\%	%7
+& 80.43\%	%8
+& 80.88\%	%9
+& 80.88\%	%10
+& 80.91\%	%20
+& 80.86\%	%40
+& 80.86\%	%60
+& 80.78\%	%100
+& 81.02\% (k=24)
+
+\\ \hline
+Reuters
+- topics
+& 75.73\%	(k=1)
+\\ \hline
+Przepisy
+- kulinarne 
+
+& ---		%60
+& ---		%100
+& 75\% (k=4)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+%tabela 5
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki ulicznej.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 77.77\%	%1
+& 74.43\%	%2
+& 79.99\%	%3
+& 79.36\%	%4
+& 80.97\%	%5
+& 80.61\%	%6
+& 81.04\%	%7
+& 81.08\%	%8
+& 81.34\%	%9
+& 81.67\%	%10
+& 81.32\%	%20
+& 80.88\%	%40
+& 80.32\%	%60
+& 80.16\%	%100
+& 81.67\% (k=10)
+\\ \hline
+Reuters
+- topics
+& 75.73\%	(k=1)
+\\ \hline
+Przepisy
+- kulinarne 
+
+& ---		%60
+& ---		%100
+& 75\% (k=4)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+%tabela 6
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
+\caption{ Procent poprawnych wyników dla pierwszej metody ekstrakcji i metryki Cebyszewa.}\\ 
+\hline
+
+Zbiór
+dokumentów
+
+ &\multicolumn{15}{c|}{Parametr k}\\
+\cline{2-16}
+& 1
+& 2
+& 3
+& 4
+& 5
+& 6
+& 7
+& 8
+& 9
+& 10
+& 20
+& 40
+& 60
+& 100
+& Najlepszy wynik
+\\ \hline\hline
+Reuters
+- places
+& 79.84\%	%1
+& 79.84\%	%2
+& 79.84\%	%3
+& 79.84\%	%4
+& 79.84\%	%5
+& 79.84\%	%6
+& 79.84\%	%7
+& 79.84\%	%8
+& 79.84\%	%9
+& 79.84\%	%10
+& 79.84\%	%20
+& 79.84\%	%40
+& 79.84\%	%60
+& 79.84\%	%100
+& 79.84\% (k=1-100)
+\\ \hline
+Reuters
+- topics
+& 75.73\%	(k=1)
+\\ \hline
+Przepisy
+- kulinarne 
+
+& ---		%60
+& ---		%100
+& 75\% (k=4)
+\\ \hline
+\end{longtable}
+}
+\endgroup
+
+
+
+%tabela 7
+
+\begingroup
+{\scriptsize  
+\setlength{\LTleft}{-20cm plus -1fill}
+\setlength{\LTright}{\LTleft}
+
+\begin{longtable}{|p{1cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{0.7cm}|p{1.1cm}|}
 \caption{ Procent poprawnych wyników dla podobieństwa tekstów za pomocą miary Jaccarda.}\\ 
 \hline
 
@@ -590,7 +792,7 @@ Przepisy
 
 
 
-%tabela 5
+%tabela 8
 
 \begingroup
 {\scriptsize  
@@ -682,7 +884,7 @@ Przepisy
 
 
 
-%tabela 6
+%tabela 9
 
 \begingroup
 {\scriptsize  
@@ -773,6 +975,7 @@ Przepisy
 \end{longtable}
 }
 \endgroup
+
 
 
 \section{Dyskusja}
