@@ -776,26 +776,22 @@ Przepisy
 
 
 \section{Dyskusja}
-{\color{blue}
-Sekcja ta powinna zawierać dokładną interpretację uzyskanych wyników
-eksperymentów wraz ze szczegółowymi wnioskami z nich płynącymi. Najcenniejsze
-są, rzecz jasna, wnioski o charakterze uniwersalnym, które mogą być istotne
-przy innych, podobnych zadaniach. Należy również omówić i wyjaśnić wszystkie
-napotakane problemy (jeśli takie były). Każdy wniosek powinien mieć poparcie
-we wcześniej przeprowadzonych eksperymentach (odwołania do konkretnych
-wyników). Jest to jedna z najważniejszych sekcji tego sprawozdania, gdyż
-prezentuje poziom zrozumienia badanego problemu.}
-\section{Wnioski}
-{\color{blue}W tej, przedostatniej, sekcji należy zamieścić podsumowanie
-najważniejszych wniosków z sekcji poprzedniej. Najlepiej jest je po prostu
-wypunktować. Znów, tak jak poprzednio, najistotniejsze są wnioski o
-charakterze uniwersalnym.}
+W metodzie $k$-NN metryka Czebyszewa daje najgorsze wyniki spośród badanych metryk, ponieważ jest bardzo wrażliwa na maksymalną różnicę współrzędnych i nawet jeżeli pozostałe współrzędne są podobne, to wektory są klasyfikowane jako odległe od siebie. Metryki euklidesowa i manhattan dają podobne, dobre rezultaty, chociaż metryka euklidesowa jest nieznacznie lepsza.
 
+Współczynnik Jaccarda dobrze sprawdza się jako miara podobieństwa tekstów. Metoda n-gramów jest skuteczna jedynie dla tekstów gdzie we wszystkich artykułach w danej kategorii występują podobne słowa (przypadek dla przepisow kulinarnych).
+
+Jak pokazuje zmodyfikowana przez nas miara Jaccarda, połączenie ze sobą kilku metod może przynieść poprawę wyników; do uzyskania znacznej poprawy konieczna jest jednak dogłębna znajomość dziedziny.
+
+Metody nie sprawiają wrażenia złożonych obliczeniowo, jednak ilość danych, jaką muszą one przetworzyć jest znaczna. Implementacja metod jest bardzo dobrym polem do optymalizacji, niejednokrotnie zdażało się nam przyspieszyć program o więcej niż 2x. Wciąż nie pozwoliło to jednak na policzenie wyników w rozsądnym czasie dla wszystkich testów \ppauza z części testów musieliśmy zrezygnować.
+
+\section{Wnioski}
+\begin{itemize}
+ \item Zmiana metryki w metodzie $k$-NN powoduje duże zmiany skuteczności.
+ \item Nie ma metody uniwersalnej, skuteczność jest zależna od dobranych parametrów.
+ \item Do klasyfikacji przydaje się wszelka wiedza o klasyfikowanych obiektach.
+ \item Często należy ręcznie dobrać parametry metod.
+\end{itemize}
 
 \begin{thebibliography}{0}
 \end{thebibliography}
-{\color{blue} 
-Na końcu należy obowiązkowo podać cytowaną w sprawozdaniu
-literaturę, z której grupa korzystała w trakcie prac nad zadaniem (przykład na
-końcu szablonu)}
 \end{document}
